@@ -1,0 +1,21 @@
+name: cars-dapp
+region: eu-central-1
+cloudProvider: aws
+sdk:
+  language: ts
+  options:
+    runtime: browser
+  path: ../client/src/sdk
+classes:
+  - path: ./src/hello.ts
+    type: jsonrpc
+    methods: []
+  - path: ./src/minter-contract.ts
+    type: jsonrpc
+    methods: []
+  - path: ./src/information-contract.ts
+    type: jsonrpc
+    methods: []
+  - path: ./src/market-contract.ts
+    type: jsonrpc
+    methods: []
