@@ -1,24 +1,18 @@
-import { Address, ResultsParser, U64Value } from "@multiversx/sdk-core/out";
+import { AbiRegistry, Address, ResultsParser, SmartContract, U64Value } from "@multiversx/sdk-core/out";
 import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers/out";
-import { Contract } from "./contract";
 import { Offers } from "./interfaces";
+import jsonData from "./abis/minter-sc.abi.json" //needs change
+import { minterContractAddress } from "./constants"; //needs change
 
 
 
 
+export class MarketSmartContract {
+    readonly networkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com");
 
-export class InformationSmartContract extends Contract {
-    readonly networkProvider: ProxyNetworkProvider;
-
-    constructor(
-        address: Address,
-        jsonData: any,
-        networkProvider: ProxyNetworkProvider
-    ) {
-
-        super(address, !jsonData);
-        this.networkProvider = networkProvider;
-    }
+    json = JSON.parse(JSON.stringify(jsonData));
+    abiRegistry = AbiRegistry.create(this.json);
+    contract = new SmartContract({ address: new Address(minterContractAddress), abi: this.abiRegistry });
 
     async getOffers(ids: number[]) {
         const u64Ids = ids.map(id => new U64Value(id))

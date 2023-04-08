@@ -1,0 +1,205 @@
+{
+    "buildInfo": {
+        "rustc": {
+            "version": "1.70.0-nightly",
+            "commitHash": "db0cbc48d4aaa300713a95d9b317a365a474490c",
+            "commitDate": "2023-03-26",
+            "channel": "Nightly",
+            "short": "rustc 1.70.0-nightly (db0cbc48d 2023-03-26)"
+        },
+        "contractCrate": {
+            "name": "minter-sc",
+            "version": "0.0.0"
+        },
+        "framework": {
+            "name": "multiversx-sc",
+            "version": "0.39.8"
+        }
+    },
+    "name": "Minter",
+    "constructor": {
+        "inputs": [],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "name": "whitelist",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "address",
+                    "type": "Address"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "delist",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "address",
+                    "type": "Address"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "initializeManufacturer",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "name",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "createModel",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "EGLD"
+            ],
+            "inputs": [
+                {
+                    "name": "collection_name",
+                    "type": "bytes"
+                },
+                {
+                    "name": "token_ticker",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "setLocalRoles",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "token_identifier",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "createVehicle",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "token_identifier",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "vin",
+                    "type": "bytes"
+                },
+                {
+                    "name": "model_name",
+                    "type": "bytes"
+                },
+                {
+                    "name": "model_build_year",
+                    "type": "u64"
+                },
+                {
+                    "name": "model_plant_country",
+                    "type": "bytes"
+                },
+                {
+                    "name": "media",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "burnQuantity",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [],
+            "outputs": []
+        },
+        {
+            "name": "sendToMarket",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "token_identifier",
+                    "type": "TokenIdentifier"
+                },
+                {
+                    "name": "contract_address",
+                    "type": "Address"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "viewManufacturer",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "address",
+                    "type": "Address"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "Manufacturer"
+                }
+            ]
+        },
+        {
+            "name": "viewIsWhitelisted",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "address",
+                    "type": "Address"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "bool"
+                }
+            ]
+        }
+    ],
+    "events": [],
+    "hasCallback": true,
+    "types": {
+        "Manufacturer": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "name",
+                    "type": "bytes"
+                },
+                {
+                    "name": "models",
+                    "type": "List<Model>"
+                }
+            ]
+        },
+        "Model": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "name",
+                    "type": "bytes"
+                },
+                {
+                    "name": "token_identifier",
+                    "type": "TokenIdentifier"
+                }
+            ]
+        }
+    }
+}

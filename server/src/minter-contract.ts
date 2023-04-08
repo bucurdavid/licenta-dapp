@@ -1,19 +1,19 @@
-import { Address, AddressValue, ResultsParser } from "@multiversx/sdk-core/out";
+import { AbiRegistry, Address, AddressValue, ResultsParser, SmartContract, StringValue } from "@multiversx/sdk-core/out";
 import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers/out";
-import { Contract } from "./contract";
 import { Manufacturer, Model } from "./interfaces";
+import jsonData from "./abis/minter-sc.abi.json"
+import { minterContractAddress } from "./constants";
 
-export class MinterSmartContract extends Contract {
-    readonly networkProvider: ProxyNetworkProvider;
+export class MinterSmartContract {
+    readonly networkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com");
 
-    constructor(
-        address: Address,
-        jsonData: any,
-        networkProvider: ProxyNetworkProvider
-    ) {
-        super(address, !jsonData);
-        this.networkProvider = networkProvider;
-    }
+
+    json = JSON.parse(JSON.stringify(jsonData));
+    abiRegistry = AbiRegistry.create(this.json);
+    contract = new SmartContract({ address: new Address(minterContractAddress), abi: this.abiRegistry });
+
+
+
 
     async checkAddressIsWhitelisted(address: string) {
 
@@ -57,17 +57,17 @@ export class MinterSmartContract extends Contract {
             console.log(returnValue);
 
             const models: Model[] = returnValue["models"].map((model: any) => ({
-                name: model["name"],
+                name: model["name"].toString(),
                 tokenIdentifier: model["token_identifier"]
             }));
 
             const manufacturer: Manufacturer = {
-                name: returnValue["name"] as string,
-                modes: models
+                name: returnValue["name"].toString(),
+                models: models
             };
 
             return {
-                manufacturer: manufacturer
+                manufacturer
             };
         }
     }

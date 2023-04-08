@@ -1,20 +1,15 @@
-import { Address, ResultsParser, TokenIdentifierValue, U64Value } from "@multiversx/sdk-core/out";
+import { AbiRegistry, Address, ResultsParser, SmartContract, TokenIdentifierValue, U64Value } from "@multiversx/sdk-core/out";
 import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers/out";
-import { Contract } from "./contract";
 import { HistoryData } from "./interfaces";
+import jsonData from "./abis/minter-sc.abi.json" // needs update
+import { minterContractAddress } from "./constants"; //needs update
 
-export class InformationSmartContract extends Contract {
-    readonly networkProvider: ProxyNetworkProvider;
+export class InformationSmartContract {
+    readonly networkProvider = new ProxyNetworkProvider("https://devnet-gateway.multiversx.com");
 
-    constructor(
-        address: Address,
-        jsonData: any,
-        networkProvider: ProxyNetworkProvider
-    ) {
-
-        super(address, !jsonData);
-        this.networkProvider = networkProvider;
-    }
+    json = JSON.parse(JSON.stringify(jsonData));
+    abiRegistry = AbiRegistry.create(this.json);
+    contract = new SmartContract({ address: new Address(minterContractAddress), abi: this.abiRegistry });
 
     async getInformation(tokenIdentifier: string, nonce: number) {
         const interaction = this.contract.methodsExplicit.viewCarData([

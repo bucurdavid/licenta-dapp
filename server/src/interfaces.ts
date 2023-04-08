@@ -16,7 +16,7 @@ export interface Model {
 
 export interface Manufacturer {
     name: string;
-    modes: Model[];
+    models: Model[];
 }
 
 export enum CarStatus {

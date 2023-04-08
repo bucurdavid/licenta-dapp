@@ -1,0 +1,3 @@
+
+
+export const minterContractAddress = "erd1qqqqqqqqqqqqqpgq7zfnk40p4jhde93rqvsf05vlt2mm6t2ahn9qpkh5uf"
