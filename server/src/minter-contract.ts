@@ -1,7 +1,7 @@
 import { Address, AddressValue, ResultsParser } from "@multiversx/sdk-core/out";
 import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers/out";
 import { Contract } from "./contract";
-import { Model } from "./interfaces";
+import { Manufacturer, Model } from "./interfaces";
 
 export class MinterSmartContract extends Contract {
     readonly networkProvider: ProxyNetworkProvider;
@@ -55,9 +55,20 @@ export class MinterSmartContract extends Contract {
         if (returnCode.isSuccess()) {
             let returnValue = firstValue?.valueOf();
             console.log(returnValue);
+
+            const models: Model[] = returnValue["models"].map((model: any) => ({
+                name: model["name"],
+                tokenIdentifier: model["token_identifier"]
+            }));
+
+            const manufacturer: Manufacturer = {
+                name: returnValue["name"] as string,
+                modes: models
+            };
+
             return {
-                manufacturer: { name: returnValue["name"] as string, modes: returnValue["models"] as Model[] }
-            }
+                manufacturer: manufacturer
+            };
         }
     }
 }

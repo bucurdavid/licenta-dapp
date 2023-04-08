@@ -1,6 +1,7 @@
 import { Address, ResultsParser, TokenIdentifierValue, U64Value } from "@multiversx/sdk-core/out";
 import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers/out";
 import { Contract } from "./contract";
+import { HistoryData } from "./interfaces";
 
 export class InformationSmartContract extends Contract {
     readonly networkProvider: ProxyNetworkProvider;
@@ -31,16 +32,16 @@ export class InformationSmartContract extends Contract {
             let returnValue = firstValue?.valueOf();
             console.log(returnValue);
 
-            return {
-                data: {
-                    odometerValues: returnValue["odometer_values"] as number[],
-                    odometerTimestamps: returnValue["odometer_timestamps"] as number[],
-                    dtcCodes: returnValue["dtc_codes"] as string[][],
-                    dtcTimestamps: returnValue["dtc_timestamps"] as number[],
-                    incidents: returnValue["incidents"] as boolean[],
-                    incidentTimestamps: returnValue["incident_timestamps"] as number[],
-                }
-            }
+            const historyData: HistoryData = {
+                odometerValues: returnValue["odometer_values"] as number[],
+                odometerTimestamps: returnValue["odometer_timestamps"] as number[],
+                dtcCodes: returnValue["dtc_codes"] as string[][],
+                dtcTimestamps: returnValue["dtc_timestamps"] as number[],
+                incidents: returnValue["incidents"] as boolean[],
+                incidentTimestamps: returnValue["incident_timestamps"] as number[],
+            };
+
+            return historyData;
 
         }
     }
