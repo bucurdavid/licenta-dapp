@@ -1,3 +1,4 @@
 
 
 export const minterContractAddress = "erd1qqqqqqqqqqqqqpgq7zfnk40p4jhde93rqvsf05vlt2mm6t2ahn9qpkh5uf"
+export const dataContractAddres = "erd1qqqqqqqqqqqqqpgqu89f87g89wxjg8ww0f8f2ym67zt3wq9yhn9quayr2c"
