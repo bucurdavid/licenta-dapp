@@ -1,4 +1,5 @@
 
 
 export const minterContractAddress = "erd1qqqqqqqqqqqqqpgq7zfnk40p4jhde93rqvsf05vlt2mm6t2ahn9qpkh5uf"
-export const dataContractAddres = "erd1qqqqqqqqqqqqqpgqu89f87g89wxjg8ww0f8f2ym67zt3wq9yhn9quayr2c"
+export const dataContractAddres = "erd1qqqqqqqqqqqqqpgqlgry283svj2maedw5eyv32uhtvu8cmq6hn9qp3np6v"
+export const marketContractAddress = "erd1qqqqqqqqqqqqqpgqvhlytzc0sf4nmma7tcjzrqapzqp60jcehn9qpd9m9x"

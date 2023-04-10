@@ -1,8 +1,8 @@
-import { AbiRegistry, Address, ResultsParser, SmartContract, U64Value } from "@multiversx/sdk-core/out";
+import { AbiRegistry, Address, ResultsParser, SmartContract, TypedValue, U64Value } from "@multiversx/sdk-core/out";
 import { ProxyNetworkProvider } from "@multiversx/sdk-network-providers/out";
 import { Offers } from "./interfaces";
-import jsonData from "./abis/minter-sc.abi.json" //needs change
-import { minterContractAddress } from "./constants"; //needs change
+import jsonData from "./abis/market-sc.abi.json"
+import { marketContractAddress } from "./constants";
 
 
 
@@ -12,7 +12,7 @@ export class MarketSmartContract {
 
     json = JSON.parse(JSON.stringify(jsonData));
     abiRegistry = AbiRegistry.create(this.json);
-    contract = new SmartContract({ address: new Address(minterContractAddress), abi: this.abiRegistry });
+    contract = new SmartContract({ address: new Address(marketContractAddress), abi: this.abiRegistry });
 
     async getOffers(ids: number[]) {
         const u64Ids = ids.map(id => new U64Value(id))
@@ -28,15 +28,15 @@ export class MarketSmartContract {
             const returnValue = firstValue?.valueOf();
             console.log(returnValue);
             const offers: Offers[] = returnValue.map((offer: any) => ({
-                owner: offer.owner,
-                carTokenIdentifier: offer.carTokenIdentifier,
-                carNonce: offer.carNonce,
-                carAmount: offer.carAmount,
-                paymentTokenIdentifier: offer.paymentTokenIdentifier,
-                paymentNonce: offer.paymentNonce,
-                paymentAmount: offer.paymentAmount,
-                status: offer.status,
-                quantity: offer.quantity
+                owner: offer.owner.bech32(),
+                carTokenIdentifier: offer["car"]["token_identifier"].toString(),
+                carNonce: offer["car"]["token_nonce"].toString(),
+                carAmount: offer["car"]["amount"] as number,
+                paymentTokenIdentifier: offer["wanted_payment"]["token_identifier"].toString(),
+                paymentNonce: offer["wanted_payment"]["token_nonce"].toString(),
+                paymentAmount: offer["wanted_payment"]["amount"] as number,
+                status: offer["status"]["name"].toString(),
+                quantity: offer.quantity as number,
             }));
             return offers;
         }
