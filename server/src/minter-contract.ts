@@ -2,7 +2,6 @@ import {
   AbiRegistry,
   Address,
   AddressValue,
-  BigIntValue,
   BooleanValue,
   ContractCallPayloadBuilder,
   ContractFunction,
@@ -15,9 +14,9 @@ import {
   U64Value,
 } from '@multiversx/sdk-core/out'
 import {ProxyNetworkProvider} from '@multiversx/sdk-network-providers/out'
-import {Manufacturer, Model} from './interfaces'
 import jsonData from './abis/minter-sc.abi.json'
-import {minterContractAddress} from './constants'
+import {minterContractAddress} from './config'
+import {Manufacturer, Model} from './config'
 
 export class MinterSmartContract {
   readonly networkProvider = new ProxyNetworkProvider(
@@ -53,7 +52,7 @@ export class MinterSmartContract {
     }
   }
 
-  async getManufacturer(address: string) {
+  async getManufacturer(address: string): Promise<Manufacturer> {
     const interaction = this.contract.methodsExplicit.viewManufacturer([
       new AddressValue(new Address(address)),
     ])
@@ -79,8 +78,11 @@ export class MinterSmartContract {
         models: models,
       }
 
+      return manufacturer
+    } else {
       return {
-        manufacturer,
+        name: '',
+        models: [],
       }
     }
   }

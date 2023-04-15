@@ -10,15 +10,14 @@ import {
   SmartContract,
   StringValue,
   TokenIdentifierValue,
-  TokenTransfer,
   Transaction,
   U64Value,
   U8Value,
 } from '@multiversx/sdk-core/out'
 import {ProxyNetworkProvider} from '@multiversx/sdk-network-providers/out'
-import {CarAttributes, CarStatus, Offers} from './interfaces'
 import jsonData from './abis/market-sc.abi.json'
-import {marketContractAddress} from './constants'
+import {marketContractAddress} from './config'
+import {CarAttributes, CarStatus, Offers} from './config'
 
 export class MarketSmartContract {
   readonly networkProvider = new ProxyNetworkProvider(

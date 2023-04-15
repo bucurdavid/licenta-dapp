@@ -1,10 +1,3 @@
-/**
-* This is an auto generated code. This code should not be modified since the file can be overwriten 
-* if new genezio commands are executed.
-*/
-     
-import { Remote } from "./remote"
-
 export interface CarAttributes {
   vin: string
   name: string
@@ -12,7 +5,7 @@ export interface CarAttributes {
   plantCountry: string
   lastOdometerValue: number
   lastOdometerTimestamp: number
-};
+}
 
 export interface HistoryData {
   odometerValues: number[]
@@ -21,12 +14,12 @@ export interface HistoryData {
   dtcTimestamps: number[]
   incidents: boolean[]
   incidentTimestamps: number[]
-};
+}
 
 export enum CarStatus {
   New,
   SecondHand,
-};
+}
 
 export interface Offers {
   owner: string
@@ -38,38 +31,27 @@ export interface Offers {
   paymentAmount: number
   status: CarStatus
   quantity: number
-};
+}
 
 export interface Model {
   name: string
   tokenIdentifier: string
-};
+}
 
 export interface Manufacturer {
   name: string
   models: Model[]
-};
-
-export const minterContractAddress =
-  'erd1qqqqqqqqqqqqqpgqks3uwdl7htl4z5dtkp462k783yxknmnchn9q9ezeg9';
-
-export const dataContractAddres =
-  'erd1qqqqqqqqqqqqqpgqpjfycjjyypr5katnsh503yyg0upezxedhn9qgwaemy';
-
-export const marketContractAddress =
-  'erd1qqqqqqqqqqqqqpgq0zpe7un05kwe2hz4hd2fsnuycm6qgyp6hn9qft3q3y';
-
-
-
-export class HelloWorldClass {
-    static remote = new Remote("http://127.0.0.1:8083/HelloWorldClass")
-
-    static async checkInternalServerHealth(): Promise<any> {
-        return await HelloWorldClass.remote.call("HelloWorldClass.checkInternalServerHealth")  
-  }
-
-  
-
 }
 
-export { Remote };
+export const minterContractAddress =
+  'erd1qqqqqqqqqqqqqpgqks3uwdl7htl4z5dtkp462k783yxknmnchn9q9ezeg9'
+export const dataContractAddres =
+  'erd1qqqqqqqqqqqqqpgqpjfycjjyypr5katnsh503yyg0upezxedhn9qgwaemy'
+export const marketContractAddress =
+  'erd1qqqqqqqqqqqqqpgq0zpe7un05kwe2hz4hd2fsnuycm6qgyp6hn9qft3q3y'
+
+export class HelloWorldClass {
+  checkInternalServerHealth() {
+    return {data: 'hello'}
+  }
+}

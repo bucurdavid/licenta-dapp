@@ -1,8 +1,8 @@
 import {AbiRegistry, BinaryCodec} from '@multiversx/sdk-core/out'
-import {CarAttributes, HistoryData} from './interfaces'
 import {numberToPaddedHex} from './utils'
 import minterAbi from './abis/market-sc.abi.json'
 import {InformationSmartContract} from './information-contract'
+import {CarAttributes, HistoryData} from './config'
 
 export class Car {
   tokenIdentifier: string = ''

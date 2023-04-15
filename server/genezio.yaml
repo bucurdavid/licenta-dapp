@@ -7,7 +7,7 @@ sdk:
     runtime: browser
   path: ../client/src/sdk
 classes:
-  - path: ./src/hello.ts
+  - path: ./src/config.ts
     type: jsonrpc
     methods: []
   - path: ./src/minter-contract.ts

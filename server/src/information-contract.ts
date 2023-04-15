@@ -13,9 +13,9 @@ import {
   U64Value,
 } from '@multiversx/sdk-core/out'
 import {ProxyNetworkProvider} from '@multiversx/sdk-network-providers/out'
-import {HistoryData} from './interfaces'
-import jsonData from './abis/car-data-sc.abi.json' // needs update
-import {dataContractAddres} from './constants' //needs update
+import jsonData from './abis/car-data-sc.abi.json'
+import {dataContractAddres} from './config'
+import {HistoryData} from './config'
 
 export class InformationSmartContract {
   readonly networkProvider = new ProxyNetworkProvider(
