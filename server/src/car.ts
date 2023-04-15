@@ -67,7 +67,7 @@ export class Car {
         make: payload['name'].split(' ')[0],
         supply: payload['supply'] as number,
         ...Car.decodeAttributes(payload['attributes']),
-        ...historyData,
+        historyData: historyData,
       })
       return car
     } catch {
