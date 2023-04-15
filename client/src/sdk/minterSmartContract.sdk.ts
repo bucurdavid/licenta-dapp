@@ -18,6 +18,30 @@ export class MinterSmartContract {
         return await MinterSmartContract.remote.call("MinterSmartContract.getManufacturer", address)  
   }
 
+  static async initializeManufacturer(senderAddress: IAddress, name: string): Promise<Transaction> {
+        return await MinterSmartContract.remote.call("MinterSmartContract.initializeManufacturer", senderAddress, name)  
+  }
+
+  static async createModel(senderAddress: IAddress, collectionName: string, ticker: string): Promise<Transaction> {
+        return await MinterSmartContract.remote.call("MinterSmartContract.createModel", senderAddress, collectionName, ticker)  
+  }
+
+  static async setLocalRoles(senderAddress: IAddress, tokenIdentifier: string): Promise<Transaction> {
+        return await MinterSmartContract.remote.call("MinterSmartContract.setLocalRoles", senderAddress, tokenIdentifier)  
+  }
+
+  static async setTransferRole(senderAddress: IAddress, tokenIdentifier: string): Promise<Transaction> {
+        return await MinterSmartContract.remote.call("MinterSmartContract.setTransferRole", senderAddress, tokenIdentifier)  
+  }
+
+  static async createVehicle(senderAddress: IAddress, vin: string, modelName: string, modelBuildYear: number, modelPlantCountry: string, media: string): Promise<Transaction> {
+        return await MinterSmartContract.remote.call("MinterSmartContract.createVehicle", senderAddress, vin, modelName, modelBuildYear, modelPlantCountry, media)  
+  }
+
+  static async withdrawCars(senderAddress: IAddress, all: undefined): Promise<Transaction> {
+        return await MinterSmartContract.remote.call("MinterSmartContract.withdrawCars", senderAddress, all)  
+  }
+
   
 
 }

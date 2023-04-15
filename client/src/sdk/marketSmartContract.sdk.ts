@@ -14,6 +14,14 @@ export class MarketSmartContract {
         return await MarketSmartContract.remote.call("MarketSmartContract.getOffers", ids)  
   }
 
+  static async getUserOffers(address: string): Promise<any> {
+        return await MarketSmartContract.remote.call("MarketSmartContract.getUserOffers", address)  
+  }
+
+  static async getCarDetails(tokenIdentifier: string, tokenNonce: number): Promise<any> {
+        return await MarketSmartContract.remote.call("MarketSmartContract.getCarDetails", tokenIdentifier, tokenNonce)  
+  }
+
   
 
 }
