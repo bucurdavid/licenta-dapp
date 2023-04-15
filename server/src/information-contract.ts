@@ -27,7 +27,10 @@ export class InformationSmartContract {
     abi: AbiRegistry.create(jsonData),
   })
 
-  async getInformation(tokenIdentifier: string, nonce: number) {
+  async getInformation(
+    tokenIdentifier: string,
+    nonce: number
+  ): Promise<HistoryData> {
     const interaction = this.contract.methodsExplicit.viewCarData([
       new TokenIdentifierValue(tokenIdentifier),
       new U64Value(nonce),
@@ -53,6 +56,8 @@ export class InformationSmartContract {
       }
 
       return historyData
+    } else {
+      return {} as HistoryData
     }
   }
 

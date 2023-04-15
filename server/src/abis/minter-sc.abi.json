@@ -23,6 +23,18 @@
     },
     "endpoints": [
         {
+            "name": "setMarketContract",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "address",
+                    "type": "Address"
+                }
+            ],
+            "outputs": []
+        },
+        {
             "name": "whitelist",
             "onlyOwner": true,
             "mutability": "mutable",
@@ -87,6 +99,17 @@
             "outputs": []
         },
         {
+            "name": "setTransferRole",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "token_identifier",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": []
+        },
+        {
             "name": "createVehicle",
             "mutability": "mutable",
             "inputs": [
@@ -120,23 +143,21 @@
         {
             "name": "burnQuantity",
             "mutability": "mutable",
-            "payableInTokens": [
-                "*"
-            ],
             "inputs": [],
             "outputs": []
         },
         {
-            "name": "sendToMarket",
+            "name": "withdrawCars",
             "mutability": "mutable",
             "inputs": [
                 {
-                    "name": "token_identifier",
-                    "type": "TokenIdentifier"
+                    "name": "all",
+                    "type": "bool"
                 },
                 {
-                    "name": "contract_address",
-                    "type": "Address"
+                    "name": "cars",
+                    "type": "optional<variadic<multi<TokenIdentifier,u64>>>",
+                    "multi_arg": true
                 }
             ],
             "outputs": []

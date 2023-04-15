@@ -1,5 +1,3 @@
-import {TokenTransfer} from '@multiversx/sdk-core/out'
-
 export interface HistoryData {
   odometerValues: number[]
   odometerTimestamps: number[]

@@ -19,3 +19,6 @@ classes:
   - path: ./src/market-contract.ts
     type: jsonrpc
     methods: []
+  - path: ./src/car.ts
+    type: jsonrpc
+    methods: []
