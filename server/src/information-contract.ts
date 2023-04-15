@@ -14,8 +14,16 @@ import {
 } from '@multiversx/sdk-core/out'
 import {ProxyNetworkProvider} from '@multiversx/sdk-network-providers/out'
 import jsonData from './abis/car-data-sc.abi.json'
-import {dataContractAddres} from './config'
-import {HistoryData} from './config'
+import {dataContractAddres} from './constants'
+
+export interface HistoryData {
+  odometerValues: number[]
+  odometerTimestamps: number[]
+  dtcCodes: string[][]
+  dtcTimestamps: number[]
+  incidents: boolean[]
+  incidentTimestamps: number[]
+}
 
 export class InformationSmartContract {
   readonly networkProvider = new ProxyNetworkProvider(
@@ -27,10 +35,7 @@ export class InformationSmartContract {
     abi: AbiRegistry.create(jsonData),
   })
 
-  async getInformation(
-    tokenIdentifier: string,
-    nonce: number
-  ): Promise<HistoryData> {
+  async getInformation(tokenIdentifier: string, nonce: number) {
     const interaction = this.contract.methodsExplicit.viewCarData([
       new TokenIdentifierValue(tokenIdentifier),
       new U64Value(nonce),
@@ -62,14 +67,14 @@ export class InformationSmartContract {
   }
 
   addData(
-    senderAddress: IAddress,
+    senderAddress: string,
     tokenIdentifier: string,
     nonce: number,
     timestamp: number,
     odometerValue: number,
     dtcCodes: string[],
     incident: boolean
-  ): Transaction {
+  ) {
     const dtc = dtcCodes.map((dtcCode) => new StringValue(dtcCode))
 
     const contractCallPayloadBuilder = new ContractCallPayloadBuilder()
@@ -88,7 +93,7 @@ export class InformationSmartContract {
       data: contractCallPayloadBuilder.build(),
 
       receiver: this.contract.getAddress(),
-      sender: senderAddress,
+      sender: new Address(senderAddress),
       gasLimit: 19000000,
       chainID: 'D',
     })
@@ -96,11 +101,11 @@ export class InformationSmartContract {
   }
 
   addIncident(
-    senderAddress: IAddress,
+    senderAddress: string,
     tokenIdentifier: string,
     nonce: number,
     timestamp: number
-  ): Transaction {
+  ) {
     const addIncidentTx = new Transaction({
       value: 0,
       data: new ContractCallPayloadBuilder()
@@ -111,7 +116,7 @@ export class InformationSmartContract {
         .build(),
 
       receiver: this.contract.getAddress(),
-      sender: senderAddress,
+      sender: new Address(senderAddress),
       gasLimit: 8000000,
       chainID: 'D',
     })

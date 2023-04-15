@@ -15,9 +15,17 @@ import {
 } from '@multiversx/sdk-core/out'
 import {ProxyNetworkProvider} from '@multiversx/sdk-network-providers/out'
 import jsonData from './abis/minter-sc.abi.json'
-import {minterContractAddress} from './config'
-import {Manufacturer, Model} from './config'
+import {minterContractAddress} from './constants'
 
+export interface Model {
+  name: string
+  tokenIdentifier: string
+}
+
+export interface Manufacturer {
+  name: string
+  models: Model[]
+}
 export class MinterSmartContract {
   readonly networkProvider = new ProxyNetworkProvider(
     'https://devnet-gateway.multiversx.com'
@@ -87,7 +95,7 @@ export class MinterSmartContract {
     }
   }
 
-  initializeManufacturer(senderAddress: IAddress, name: string): Transaction {
+  initializeManufacturer(senderAddress: string, name: string) {
     const initManufacturer = new Transaction({
       value: 0,
       data: new ContractCallPayloadBuilder()
@@ -95,18 +103,14 @@ export class MinterSmartContract {
         .addArg(new StringValue(name))
         .build(),
       receiver: this.contract.getAddress(),
-      sender: senderAddress,
+      sender: new Address(senderAddress),
       gasLimit: 12000000,
       chainID: 'D',
     })
     return initManufacturer
   }
 
-  createModel(
-    senderAddress: IAddress,
-    collectionName: string,
-    ticker: string
-  ): Transaction {
+  createModel(senderAddress: string, collectionName: string, ticker: string) {
     const createModel = new Transaction({
       value: TokenTransfer.egldFromAmount(0.05),
       data: new ContractCallPayloadBuilder()
@@ -115,14 +119,14 @@ export class MinterSmartContract {
         .addArg(new StringValue(ticker))
         .build(),
       receiver: this.contract.getAddress(),
-      sender: senderAddress,
+      sender: new Address(senderAddress),
       gasLimit: 12000000,
       chainID: 'D',
     })
     return createModel
   }
 
-  setLocalRoles(senderAddress: IAddress, tokenIdentifier: string): Transaction {
+  setLocalRoles(senderAddress: string, tokenIdentifier: string) {
     const setLocalRoles = new Transaction({
       value: 0,
       data: new ContractCallPayloadBuilder()
@@ -130,17 +134,14 @@ export class MinterSmartContract {
         .addArg(new StringValue(tokenIdentifier))
         .build(),
       receiver: this.contract.getAddress(),
-      sender: senderAddress,
+      sender: new Address(senderAddress),
       gasLimit: 12000000,
       chainID: 'D',
     })
     return setLocalRoles
   }
 
-  setTransferRole(
-    senderAddress: IAddress,
-    tokenIdentifier: string
-  ): Transaction {
+  setTransferRole(senderAddress: string, tokenIdentifier: string) {
     const setTransferRole = new Transaction({
       value: 0,
       data: new ContractCallPayloadBuilder()
@@ -148,7 +149,7 @@ export class MinterSmartContract {
         .addArg(new StringValue(tokenIdentifier))
         .build(),
       receiver: this.contract.getAddress(),
-      sender: senderAddress,
+      sender: new Address(senderAddress),
       gasLimit: 12000000,
       chainID: 'D',
     })
@@ -156,13 +157,13 @@ export class MinterSmartContract {
   }
 
   createVehicle(
-    senderAddress: IAddress,
+    senderAddress: string,
     vin: string,
     modelName: string,
     modelBuildYear: number,
     modelPlantCountry: string,
     media: string
-  ): Transaction {
+  ) {
     const createVehicle = new Transaction({
       value: 0,
       data: new ContractCallPayloadBuilder()
@@ -174,14 +175,14 @@ export class MinterSmartContract {
         .addArg(new StringValue(media))
         .build(),
       receiver: this.contract.getAddress(),
-      sender: senderAddress,
+      sender: new Address(senderAddress),
       gasLimit: 12000000,
       chainID: 'D',
     })
     return createVehicle
   }
 
-  withdrawCars(senderAddress: IAddress, all = true): Transaction {
+  withdrawCars(senderAddress: string, all = true) {
     const withdrawCars = new Transaction({
       value: 0,
       data: new ContractCallPayloadBuilder()
@@ -189,7 +190,7 @@ export class MinterSmartContract {
         .addArg(new BooleanValue(all))
         .build(),
       receiver: this.contract.getAddress(),
-      sender: senderAddress,
+      sender: new Address(senderAddress),
       gasLimit: 19000000,
       chainID: 'D',
     })

@@ -16,8 +16,33 @@ import {
 } from '@multiversx/sdk-core/out'
 import {ProxyNetworkProvider} from '@multiversx/sdk-network-providers/out'
 import jsonData from './abis/market-sc.abi.json'
-import {marketContractAddress} from './config'
-import {CarAttributes, CarStatus, Offers} from './config'
+import {marketContractAddress} from './constants'
+
+export interface CarAttributes {
+  vin: string
+  name: string
+  buildYear: number
+  plantCountry: string
+  lastOdometerValue: number
+  lastOdometerTimestamp: number
+}
+
+export interface Offers {
+  owner: string
+  carTokenIdentifier: string
+  carNonce: number
+  carAmount: number
+  paymentTokenIdentifier: string
+  paymentNonce: number
+  paymentAmount: number
+  status: CarStatus
+  quantity: number
+}
+
+export enum CarStatus {
+  New,
+  SecondHand,
+}
 
 export class MarketSmartContract {
   readonly networkProvider = new ProxyNetworkProvider(
@@ -118,7 +143,7 @@ export class MarketSmartContract {
   }
 
   addOffer(
-    senderAddress: IAddress,
+    senderAddress: string,
     carTokenIdentifier: string,
     carNonce: number,
     carAmount: number,
@@ -126,7 +151,7 @@ export class MarketSmartContract {
     paymentNonce: number,
     paymentAmount: number,
     status: CarStatus
-  ): Transaction {
+  ) {
     const addOfferTx = new Transaction({
       value: 0,
       data: new ContractCallPayloadBuilder()
@@ -141,19 +166,15 @@ export class MarketSmartContract {
         .addArg(new BigIntValue(paymentAmount))
         .addArg(new U8Value(status))
         .build(),
-      receiver: senderAddress,
-      sender: senderAddress,
+      receiver: new Address(senderAddress),
+      sender: new Address(senderAddress),
       gasLimit: 12000000,
       chainID: 'D',
     })
     return addOfferTx
   }
 
-  changePrice(
-    senderAddress: IAddress,
-    offerId: number,
-    newPrice: number
-  ): Transaction {
+  changePrice(senderAddress: string, offerId: number, newPrice: number) {
     const changePriceTx = new Transaction({
       value: 0,
       data: new ContractCallPayloadBuilder()
@@ -162,14 +183,14 @@ export class MarketSmartContract {
         .addArg(new BigIntValue(newPrice))
         .build(),
       receiver: this.contract.getAddress(),
-      sender: senderAddress,
+      sender: new Address(senderAddress),
       gasLimit: 12000000,
       chainID: 'D',
     })
     return changePriceTx
   }
 
-  cancelOffer(senderAddress: IAddress, offerId: number): Transaction {
+  cancelOffer(senderAddress: string, offerId: number) {
     const cancelOfferTx = new Transaction({
       value: 0,
       data: new ContractCallPayloadBuilder()
@@ -177,18 +198,14 @@ export class MarketSmartContract {
         .addArg(new U64Value(offerId))
         .build(),
       receiver: this.contract.getAddress(),
-      sender: senderAddress,
+      sender: new Address(senderAddress),
       gasLimit: 12000000,
       chainID: 'D',
     })
     return cancelOfferTx
   }
 
-  acceptOffer(
-    senderAddress: IAddress,
-    offerId: number,
-    price: number
-  ): Transaction {
+  acceptOffer(senderAddress: string, offerId: number, price: number) {
     const acceptOfferTx = new Transaction({
       value: price,
       data: new ContractCallPayloadBuilder()
@@ -196,7 +213,7 @@ export class MarketSmartContract {
         .addArg(new U64Value(offerId))
         .build(),
       receiver: this.contract.getAddress(),
-      sender: senderAddress,
+      sender: new Address(senderAddress),
       gasLimit: 12000000,
       chainID: 'D',
     })
