@@ -37,3 +37,12 @@ export interface Offers {
     quantity: number;
 }
 
+
+export interface CarAttributes {
+    vin: string;
+    name: string;
+    buildYear: number;
+    plantCountry: string;
+    lastOdometerValue: number;
+    lastOdometerTimestamp: number;
+}
