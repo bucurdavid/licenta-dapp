@@ -22,6 +22,22 @@ export class MarketSmartContract {
         return await MarketSmartContract.remote.call("MarketSmartContract.getCarDetails", tokenIdentifier, tokenNonce)  
   }
 
+  static async addOffer(senderAddress: IAddress, carTokenIdentifier: string, carNonce: number, carAmount: number, paymentTokenIdentifier: string, paymentNonce: number, paymentAmount: number, status: CarStatus): Promise<Transaction> {
+        return await MarketSmartContract.remote.call("MarketSmartContract.addOffer", senderAddress, carTokenIdentifier, carNonce, carAmount, paymentTokenIdentifier, paymentNonce, paymentAmount, status)  
+  }
+
+  static async changePrice(senderAddress: IAddress, offerId: number, newPrice: number): Promise<Transaction> {
+        return await MarketSmartContract.remote.call("MarketSmartContract.changePrice", senderAddress, offerId, newPrice)  
+  }
+
+  static async cancelOffer(senderAddress: IAddress, offerId: number): Promise<Transaction> {
+        return await MarketSmartContract.remote.call("MarketSmartContract.cancelOffer", senderAddress, offerId)  
+  }
+
+  static async acceptOffer(senderAddress: IAddress, offerId: number, price: number): Promise<Transaction> {
+        return await MarketSmartContract.remote.call("MarketSmartContract.acceptOffer", senderAddress, offerId, price)  
+  }
+
   
 
 }

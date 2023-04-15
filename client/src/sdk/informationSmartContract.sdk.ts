@@ -10,7 +10,7 @@ import { Remote } from "./remote"
 export class InformationSmartContract {
     static remote = new Remote("http://127.0.0.1:8083/InformationSmartContract")
 
-    static async getInformation(tokenIdentifier: string, nonce: number): Promise<any> {
+    static async getInformation(tokenIdentifier: string, nonce: number): Promise<HistoryData> {
         return await InformationSmartContract.remote.call("InformationSmartContract.getInformation", tokenIdentifier, nonce)  
   }
 
