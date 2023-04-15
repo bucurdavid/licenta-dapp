@@ -5,6 +5,32 @@
      
 import { Remote } from "./remote"
 
+export interface CarAttributes {
+  vin: string
+  name: string
+  buildYear: number
+  plantCountry: string
+  lastOdometerValue: number
+  lastOdometerTimestamp: number
+};
+
+export interface Offers {
+  owner: string
+  carTokenIdentifier: string
+  carNonce: number
+  carAmount: number
+  paymentTokenIdentifier: string
+  paymentNonce: number
+  paymentAmount: number
+  status: CarStatus
+  quantity: number
+};
+
+export enum CarStatus {
+  New,
+  SecondHand,
+};
+
 
 
 export class MarketSmartContract {
@@ -22,19 +48,19 @@ export class MarketSmartContract {
         return await MarketSmartContract.remote.call("MarketSmartContract.getCarDetails", tokenIdentifier, tokenNonce)  
   }
 
-  static async addOffer(senderAddress: IAddress, carTokenIdentifier: string, carNonce: number, carAmount: number, paymentTokenIdentifier: string, paymentNonce: number, paymentAmount: number, status: CarStatus): Promise<Transaction> {
+  static async addOffer(senderAddress: string, carTokenIdentifier: string, carNonce: number, carAmount: number, paymentTokenIdentifier: string, paymentNonce: number, paymentAmount: number, status: CarStatus): Promise<any> {
         return await MarketSmartContract.remote.call("MarketSmartContract.addOffer", senderAddress, carTokenIdentifier, carNonce, carAmount, paymentTokenIdentifier, paymentNonce, paymentAmount, status)  
   }
 
-  static async changePrice(senderAddress: IAddress, offerId: number, newPrice: number): Promise<Transaction> {
+  static async changePrice(senderAddress: string, offerId: number, newPrice: number): Promise<any> {
         return await MarketSmartContract.remote.call("MarketSmartContract.changePrice", senderAddress, offerId, newPrice)  
   }
 
-  static async cancelOffer(senderAddress: IAddress, offerId: number): Promise<Transaction> {
+  static async cancelOffer(senderAddress: string, offerId: number): Promise<any> {
         return await MarketSmartContract.remote.call("MarketSmartContract.cancelOffer", senderAddress, offerId)  
   }
 
-  static async acceptOffer(senderAddress: IAddress, offerId: number, price: number): Promise<Transaction> {
+  static async acceptOffer(senderAddress: string, offerId: number, price: number): Promise<any> {
         return await MarketSmartContract.remote.call("MarketSmartContract.acceptOffer", senderAddress, offerId, price)  
   }
 

@@ -5,6 +5,16 @@
      
 import { Remote } from "./remote"
 
+export interface Model {
+  name: string
+  tokenIdentifier: string
+};
+
+export interface Manufacturer {
+  name: string
+  models: Model[]
+};
+
 
 
 export class MinterSmartContract {
@@ -18,27 +28,27 @@ export class MinterSmartContract {
         return await MinterSmartContract.remote.call("MinterSmartContract.getManufacturer", address)  
   }
 
-  static async initializeManufacturer(senderAddress: IAddress, name: string): Promise<Transaction> {
+  static async initializeManufacturer(senderAddress: string, name: string): Promise<any> {
         return await MinterSmartContract.remote.call("MinterSmartContract.initializeManufacturer", senderAddress, name)  
   }
 
-  static async createModel(senderAddress: IAddress, collectionName: string, ticker: string): Promise<Transaction> {
+  static async createModel(senderAddress: string, collectionName: string, ticker: string): Promise<any> {
         return await MinterSmartContract.remote.call("MinterSmartContract.createModel", senderAddress, collectionName, ticker)  
   }
 
-  static async setLocalRoles(senderAddress: IAddress, tokenIdentifier: string): Promise<Transaction> {
+  static async setLocalRoles(senderAddress: string, tokenIdentifier: string): Promise<any> {
         return await MinterSmartContract.remote.call("MinterSmartContract.setLocalRoles", senderAddress, tokenIdentifier)  
   }
 
-  static async setTransferRole(senderAddress: IAddress, tokenIdentifier: string): Promise<Transaction> {
+  static async setTransferRole(senderAddress: string, tokenIdentifier: string): Promise<any> {
         return await MinterSmartContract.remote.call("MinterSmartContract.setTransferRole", senderAddress, tokenIdentifier)  
   }
 
-  static async createVehicle(senderAddress: IAddress, vin: string, modelName: string, modelBuildYear: number, modelPlantCountry: string, media: string): Promise<Transaction> {
+  static async createVehicle(senderAddress: string, vin: string, modelName: string, modelBuildYear: number, modelPlantCountry: string, media: string): Promise<any> {
         return await MinterSmartContract.remote.call("MinterSmartContract.createVehicle", senderAddress, vin, modelName, modelBuildYear, modelPlantCountry, media)  
   }
 
-  static async withdrawCars(senderAddress: IAddress, all: undefined): Promise<Transaction> {
+  static async withdrawCars(senderAddress: string, all: undefined): Promise<any> {
         return await MinterSmartContract.remote.call("MinterSmartContract.withdrawCars", senderAddress, all)  
   }
 

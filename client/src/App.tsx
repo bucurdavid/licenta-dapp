@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import logo from './logo.svg'
+import {
+  NotificationModal,
+  SignTransactionsModals,
+  TransactionsToastList,
+} from '@multiversx/sdk-dapp/UI'
+import {BrowserRouter as Router} from 'react-router-dom'
+import {DappProvider} from '@multiversx/sdk-dapp/wrappers'
+import './App.css'
+import Navbar from './components/Navbar'
+import Content from './components/Content'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <DappProvider
+        environment="devnet"
+        customNetworkConfig={{
+          name: 'customConfig',
+          apiTimeout: 6000,
+          walletConnectV2ProjectId: process.env.REACT_APP_WALLETCONNECTV2_KEY,
+        }}
+      >
+        <TransactionsToastList />
+        <NotificationModal />
+        <SignTransactionsModals />
+        <Navbar />
+        <Content />
+      </DappProvider>
+    </Router>
+  )
 }
 
-export default App;
+export default App
