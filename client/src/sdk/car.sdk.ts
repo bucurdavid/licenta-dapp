@@ -5,6 +5,24 @@
      
 import { Remote } from "./remote"
 
+export interface CarAttributes {
+  vin: string
+  name: string
+  buildYear: number
+  plantCountry: string
+  lastOdometerValue: number
+  lastOdometerTimestamp: number
+};
+
+export interface HistoryData {
+  odometerValues: number[]
+  odometerTimestamps: number[]
+  dtcCodes: string[][]
+  dtcTimestamps: number[]
+  incidents: boolean[]
+  incidentTimestamps: number[]
+};
+
 
 
 export class Car {

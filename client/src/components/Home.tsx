@@ -1,7 +1,8 @@
-import {PlusSquareIcon, StarIcon} from '@chakra-ui/icons'
 import {NavLink} from 'react-router-dom'
 import {useGetAccountInfo} from '@multiversx/sdk-dapp/hooks'
-
+import {IoCarSport} from 'react-icons/io5'
+import {FaUserAlt} from 'react-icons/fa'
+import {MdOutlinePrecisionManufacturing} from 'react-icons/md'
 export const Home = () => {
   const {address} = useGetAccountInfo()
   const isLoggedIn = Boolean(address)
@@ -12,24 +13,24 @@ export const Home = () => {
         <div className="flex justify-evenly">
           <NavLink
             to={'manufacturer'}
-            className="flex grow flex-col items-center bg-blue-200 hover:bg-blue-600 hover:scale-105 p-8 rounded-lg font-medium border-2"
+            className="flex flex-col w-[20%] items-center bg-blue-200 hover:bg-blue-600 hover:scale-105 p-8 rounded-lg font-medium border-2"
           >
             <div className="mb-2">Manufacturer</div>
-            <PlusSquareIcon boxSize={100}></PlusSquareIcon>
+            <MdOutlinePrecisionManufacturing size={'40px'} />
           </NavLink>
           <NavLink
-            to={'manufacturer'}
-            className="flex grow flex-col items-center bg-blue-200 hover:bg-blue-600 hover:scale-105 p-8 rounded-lg font-medium border-2"
+            to={'market'}
+            className="flex flex-col w-[20%] items-center bg-blue-200 hover:bg-blue-600 hover:scale-105 p-8 rounded-lg font-medium border-2"
           >
             <div className="mb-2">Market</div>
-            <PlusSquareIcon boxSize={100}></PlusSquareIcon>
+            <IoCarSport size={'40px'} />
           </NavLink>
           <NavLink
             to={'user'}
-            className="flex flex-col grow items-center bg-blue-200 hover:bg-blue-600 hover:scale-105 p-8 rounded-lg font-medium border-2"
+            className="flex flex-col w-[20%] items-center bg-blue-200 hover:bg-blue-600 hover:scale-105 p-8 rounded-lg font-medium border-2"
           >
             <div className="mb-2">User</div>
-            <StarIcon boxSize={100}></StarIcon>
+            <FaUserAlt size={'40px'} />
           </NavLink>
         </div>
       ) : (
