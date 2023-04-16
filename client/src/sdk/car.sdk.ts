@@ -23,12 +23,24 @@ export interface HistoryData {
   incidentTimestamps: number[]
 };
 
+export interface Car {
+  tokenIdentifier: string
+  nftImage: string
+  collection: string
+  nonce: number
+  name: string
+  make: string
+  supply: number
+  attributes: CarAttributes
+  historyData: HistoryData
+};
+
 
 
 export class Car {
     static remote = new Remote("http://127.0.0.1:8083/Car")
 
-    static async fromApi(tokenIdentifier: string, nonce: number): Promise<Partial<Car>> {
+    static async fromApi(tokenIdentifier: string, nonce: number): Promise<Car> {
         return await Car.remote.call("Car.fromApi", tokenIdentifier, nonce)  
   }
 

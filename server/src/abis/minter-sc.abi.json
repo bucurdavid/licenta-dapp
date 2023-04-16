@@ -163,6 +163,22 @@
             "outputs": []
         },
         {
+            "name": "viewVehicles",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "model_id",
+                    "type": "TokenIdentifier"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "variadic<u64>",
+                    "multi_result": true
+                }
+            ]
+        },
+        {
             "name": "viewManufacturer",
             "mutability": "readonly",
             "inputs": [

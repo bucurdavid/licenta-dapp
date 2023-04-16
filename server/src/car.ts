@@ -21,29 +21,27 @@ export interface HistoryData {
   incidentTimestamps: number[]
 }
 
-export class Car {
-  tokenIdentifier: string = ''
-  nftImage: string = ''
-  collection: string = ''
-  nonce: number = 0
-  name: string = ''
-  make: string = ''
-  supply: number = 0
-  attributes: CarAttributes = {} as CarAttributes
-  historyData: HistoryData = {} as HistoryData
+export interface Car {
+  tokenIdentifier: string
+  nftImage: string
+  collection: string
+  nonce: number
+  name: string
+  make: string
+  supply: number
+  attributes: CarAttributes
+  historyData: HistoryData
+}
 
+export class Car {
   static apiLink: string = 'https://devnet-api.multiversx.com'
 
   constructor(init?: Partial<Car>) {
     Object.assign(this, init)
   }
 
-  static async fromApi(
-    tokenIdentifier: string,
-    nonce: number
-  ): Promise<Partial<Car>> {
+  async fromApi(tokenIdentifier: string, nonce: number): Promise<Car> {
     const identifier = `${tokenIdentifier}-${numberToPaddedHex(nonce)}`
-    console.log(identifier)
     const nftQuery = await fetch(`${Car.apiLink}/nfts/${identifier}`)
     const carOnNetwork = await nftQuery.json()
     const infoContract = new InformationSmartContract()
@@ -59,17 +57,18 @@ export class Car {
         nonce: carOnNetwork['nonce'] as number,
         name: carOnNetwork['name'] as string,
         make: carOnNetwork['name'].split(' ')[0],
-        supply: carOnNetwork['supply'] as number,
+        supply: 1,
         ...Car.decodeAttributes(carOnNetwork['attributes']),
         historyData: historyData,
       })
+      console.log(car.supply)
       return car
     } catch {
       throw new Error('Car not found')
     }
   }
 
-  static async fromApiResponse(payload: any): Promise<Car> {
+  async fromApiResponse(payload: any): Promise<Car> {
     const identifier = payload['identifier']
     const nonce = payload['nonce'] as number
     const infoContract = new InformationSmartContract()

@@ -1,3 +1,5 @@
+import {useEffect} from 'react'
+import {useNavigate} from 'react-router-dom'
 import {useGetAccount, useGetAccountInfo} from '@multiversx/sdk-dapp/hooks'
 import {logout} from '@multiversx/sdk-dapp/utils'
 import {UnlockPage} from '@multiversx/sdk-dapp/UI/pages'
@@ -28,7 +30,7 @@ export const Navbar = () => {
               </div>
               <button
                 className="md:ml-8 sm:ml-3 ml-1 bg-blueb/90 md:px-5 px-1 rounded md:text-base text-xs"
-                onClick={() => logout('/')}
+                onClick={() => logout('')}
               >
                 Log out
               </button>

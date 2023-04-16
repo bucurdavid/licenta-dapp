@@ -5,6 +5,7 @@ import {
 import {useEffect, useState} from 'react'
 import {MinterSmartContract} from '../sdk/minterSmartContract.sdk'
 import {Manufacturer} from './interfaces'
+import {NavLink} from 'react-router-dom'
 
 export const ManufacturerPage = () => {
   const {address} = useGetAccountInfo()
@@ -52,6 +53,12 @@ export const ManufacturerPage = () => {
                             Token Identifier:{' '}
                             <span>{model.tokenIdentifier}</span>
                           </h3>
+                          <NavLink
+                            to={`collection/${model.tokenIdentifier}`}
+                            className="text-blue-500"
+                          >
+                            See Vehicles
+                          </NavLink>
                         </div>
                       ))}
                     </div>

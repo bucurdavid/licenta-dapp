@@ -9,6 +9,7 @@ import {
   ResultsParser,
   SmartContract,
   StringValue,
+  TokenIdentifierValue,
   TokenTransfer,
   Transaction,
   U64Value,
@@ -57,6 +58,28 @@ export class MinterSmartContract {
           isWhitelisted: returnValue as boolean,
         },
       }
+    }
+  }
+
+  async getVehicles(tokenIdentifier: string): Promise<number[]> {
+    const interaction = this.contract.methodsExplicit.viewVehicles([
+      new TokenIdentifierValue(tokenIdentifier),
+    ])
+    const query = interaction.buildQuery()
+
+    const queryResponse = await this.networkProvider.queryContract(query)
+    const endpointDefinition = interaction.getEndpoint()
+    const {firstValue, returnCode} = new ResultsParser().parseQueryResponse(
+      queryResponse,
+      endpointDefinition
+    )
+    if (returnCode.isSuccess()) {
+      let returnValue = firstValue?.valueOf()
+      console.log(returnValue)
+
+      return returnValue as number[]
+    } else {
+      return []
     }
   }
 

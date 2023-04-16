@@ -24,6 +24,10 @@ export class MinterSmartContract {
         return await MinterSmartContract.remote.call("MinterSmartContract.checkAddressIsWhitelisted", address)  
   }
 
+  static async getVehicles(tokenIdentifier: string): Promise<number[]> {
+        return await MinterSmartContract.remote.call("MinterSmartContract.getVehicles", tokenIdentifier)  
+  }
+
   static async getManufacturer(address: string): Promise<Manufacturer> {
         return await MinterSmartContract.remote.call("MinterSmartContract.getManufacturer", address)  
   }
