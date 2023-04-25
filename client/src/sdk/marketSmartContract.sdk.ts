@@ -14,7 +14,7 @@ export interface CarAttributes {
   lastOdometerTimestamp: number
 };
 
-export interface Offers {
+export interface Offer {
   owner: string
   carTokenIdentifier: string
   carNonce: number

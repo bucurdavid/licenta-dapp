@@ -107,7 +107,7 @@ const CollectionDetail = () => {
         .addArg(new TokenIdentifierValue(wantedTokenIdentifier))
         .addArg(new U64Value(0))
         .addArg(new BigUIntValue(wantedTokenAmount))
-        .addArg(new U8Value(1))
+        .addArg(new U8Value(0))
         .build(),
       sender: new Address(senderAddress),
       receiver: new Address(senderAddress),
@@ -122,6 +122,37 @@ const CollectionDetail = () => {
         processingMessage: 'Listing vehicle...',
         errorMessage: 'Error occured',
         successMessage: 'List successful',
+      },
+      redirectAfterSign: false,
+    })
+  }
+
+  const withdraw = async (
+    senderAddress: string,
+    tokenIdentifier: string,
+    nonce: number
+  ) => {
+    const withdrawCars = new Transaction({
+      value: 0,
+      data: new ContractCallPayloadBuilder()
+        .setFunction(new ContractFunction('withdrawCars'))
+        .addArg(new BooleanValue(false))
+        .addArg(new TokenIdentifierValue(tokenIdentifier!))
+        .addArg(new U64Value(nonce))
+        .build(),
+      receiver: new Address(minterContractAddress!),
+      sender: new Address(senderAddress),
+      gasLimit: 19000000,
+      chainID: 'D',
+    })
+    await refreshAccount()
+
+    await sendTransactions({
+      transactions: withdrawCars,
+      transactionsDisplayInfo: {
+        processingMessage: 'Withdrawing Cars...',
+        errorMessage: 'Error occured',
+        successMessage: 'Withdraw successful',
       },
       redirectAfterSign: false,
     })
@@ -295,6 +326,13 @@ const CollectionDetail = () => {
                 </ul>
                 <>
                   <Button onClick={onListOpen}>List this car</Button>
+                  <Button
+                    onClick={() => {
+                      withdraw(address, car.collection, car.nonce)
+                    }}
+                  >
+                    withdraw this car
+                  </Button>
                   <Modal isOpen={isListOpen} onClose={onListClose}>
                     <ModalOverlay />
                     <ModalContent>

@@ -5,7 +5,6 @@ import {
   BooleanValue,
   ContractCallPayloadBuilder,
   ContractFunction,
-  IAddress,
   ResultsParser,
   SmartContract,
   StringValue,
@@ -32,7 +31,7 @@ export class MinterSmartContract {
     'https://devnet-gateway.multiversx.com'
   )
 
-  contract = new SmartContract({
+  readonly contract = new SmartContract({
     address: new Address(minterContractAddress),
     abi: AbiRegistry.create(jsonData),
   })
@@ -53,12 +52,12 @@ export class MinterSmartContract {
       let returnValue = firstValue?.valueOf()
       console.log(returnValue)
 
-      return {
-        data: {
-          isWhitelisted: returnValue as boolean,
-        },
-      }
+      return returnValue
     }
+  }
+
+  getContractAddress() {
+    return this.contract.getAddress()
   }
 
   async getVehicles(tokenIdentifier: string): Promise<number[]> {
@@ -205,14 +204,14 @@ export class MinterSmartContract {
     return createVehicle
   }
 
-  withdrawCars(senderAddress: string, all = true) {
+  withdrawCars(senderAddress: string, all: boolean) {
     const withdrawCars = new Transaction({
       value: 0,
       data: new ContractCallPayloadBuilder()
         .setFunction(new ContractFunction('withdrawCars'))
         .addArg(new BooleanValue(all))
         .build(),
-      receiver: this.contract.getAddress(),
+      receiver: new Address(this.contract.getAddress().bech32().toString()),
       sender: new Address(senderAddress),
       gasLimit: 19000000,
       chainID: 'D',

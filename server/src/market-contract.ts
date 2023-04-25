@@ -27,7 +27,7 @@ export interface CarAttributes {
   lastOdometerTimestamp: number
 }
 
-export interface Offers {
+export interface Offer {
   owner: string
   carTokenIdentifier: string
   carNonce: number
@@ -54,6 +54,10 @@ export class MarketSmartContract {
     abi: AbiRegistry.create(jsonData),
   })
 
+  async getContractAddress() {
+    return this.contract.getAddress()
+  }
+
   async getOffers(ids: number[]) {
     const u64Ids = ids.map((id) => new U64Value(id))
     const interaction = this.contract.methodsExplicit.viewOffers(u64Ids)
@@ -67,7 +71,7 @@ export class MarketSmartContract {
     if (returnCode.isSuccess()) {
       const returnValue = firstValue?.valueOf()
       console.log(returnValue)
-      const offers: Offers[] = returnValue.map((offer: any) => ({
+      const offers: Offer[] = returnValue.map((offer: any) => ({
         owner: offer.owner.bech32(),
         carTokenIdentifier: offer['car']['token_identifier'].toString(),
         carNonce: offer['car']['token_nonce'].toString(),
@@ -97,7 +101,7 @@ export class MarketSmartContract {
     if (returnCode.isSuccess()) {
       const returnValue = firstValue?.valueOf()
       console.log(returnValue)
-      const offers: Offers[] = returnValue.map((offer: any) => ({
+      const offers: Offer[] = returnValue.map((offer: any) => ({
         owner: offer.owner.bech32(),
         carTokenIdentifier: offer['car']['token_identifier'].toString(),
         carNonce: offer['car']['token_nonce'].toString(),
