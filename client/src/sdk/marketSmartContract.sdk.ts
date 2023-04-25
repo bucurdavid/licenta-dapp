@@ -36,7 +36,11 @@ export enum CarStatus {
 export class MarketSmartContract {
     static remote = new Remote("http://127.0.0.1:8083/MarketSmartContract")
 
-    static async getOffers(ids: number[]): Promise<any> {
+    static async getContractAddress(): Promise<any> {
+        return await MarketSmartContract.remote.call("MarketSmartContract.getContractAddress")  
+  }
+
+  static async getOffers(ids: number[]): Promise<any> {
         return await MarketSmartContract.remote.call("MarketSmartContract.getOffers", ids)  
   }
 

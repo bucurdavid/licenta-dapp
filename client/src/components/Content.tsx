@@ -6,6 +6,7 @@ import User from './User'
 import CollectionDetail from './CollectionDetail'
 import {useEffect} from 'react'
 import {useGetAccountInfo} from '@multiversx/sdk-dapp/hooks'
+import {MarketMyListed} from './MarketMyListed'
 
 export const Content = () => {
   const {address} = useGetAccountInfo()
@@ -23,6 +24,7 @@ export const Content = () => {
       <Route path="manufacturer" element={<ManufacturerPage />} />
       <Route path="user" element={<User />} />
       <Route path="market" element={<Market />} />
+      <Route path="market/my-listed" element={<MarketMyListed />} />
       <Route
         path="manufacturer/collection/:tokenIdentifier"
         element={<CollectionDetail />}
