@@ -32,8 +32,12 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
-import {MarketSmartContract} from '../sdk/marketSmartContract.sdk'
+import {
+  MarketSmartContract,
+  OfferWithIndex,
+} from '../sdk/marketSmartContract.sdk'
 import BigNumber from 'bignumber.js'
+import {numberToPaddedHex} from './utils'
 
 const CollectionDetail = () => {
   const {tokenIdentifier} = useParams()
@@ -43,6 +47,8 @@ const CollectionDetail = () => {
   const [minterContractAddress, setMinterContractAddress] = useState<string>()
   const [marketContractAddress, setMarketContractAddress] = useState<string>()
   const [vehicles, setVehicles] = useState<Car[]>([])
+  const [listedOffers, setListedOffers] =
+    useState<{identifier: string; nonce: number}[]>()
 
   const [vin, setVin] = useState('')
   const handleVin = (event: any) => setVin(event.target.value)
@@ -77,11 +83,18 @@ const CollectionDetail = () => {
       MinterSmartContract.getVehicles(tokenIdentifier!).then((ids: number[]) =>
         Promise.all(ids.map((id) => Car.fromApi(tokenIdentifier!, id)))
       ),
+      MarketSmartContract.getUserOffers(address),
     ])
-      .then(([market, address, cars]) => {
+      .then(([market, address, cars, offers]) => {
         setMarketContractAddress(market.bech32)
         setMinterContractAddress(address.bech32)
         setVehicles(cars)
+        const tokenIdentifiers = offers.map((offer: OfferWithIndex) => ({
+          identifier: offer.offer.carTokenIdentifier,
+          nonce: offer.offer.carNonce,
+        }))
+        console.log(tokenIdentifiers)
+        setListedOffers(tokenIdentifiers)
       })
       .finally(() => setIsLoading(false))
   }, [address, hasPendingTransactions, tokenIdentifier])
@@ -325,7 +338,13 @@ const CollectionDetail = () => {
                   </li>
                 </ul>
                 <>
-                  <Button onClick={onListOpen}>List this car</Button>
+                  {listedOffers?.some(
+                    (offer) =>
+                      offer.identifier === car.collection &&
+                      offer.nonce === car.nonce
+                  ) ? null : (
+                    <Button onClick={onListOpen}>List this car</Button>
+                  )}
                   <Button
                     onClick={() => {
                       withdraw(address, car.collection, car.nonce)
@@ -359,6 +378,7 @@ const CollectionDetail = () => {
                         <Button colorScheme="blue" mr={3} onClick={onListClose}>
                           Close
                         </Button>
+
                         <Button
                           colorScheme="gray"
                           mr={3}

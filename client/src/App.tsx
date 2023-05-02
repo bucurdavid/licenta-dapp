@@ -11,24 +11,24 @@ import Content from './components/Content'
 
 function App() {
   return (
-    <div className="bg-slate-900 h-screen">
-      <Router>
-        <DappProvider
-          environment="devnet"
-          customNetworkConfig={{
-            name: 'customConfig',
-            apiTimeout: 6000,
-            walletConnectV2ProjectId: process.env.REACT_APP_WALLETCONNECTV2_KEY,
-          }}
-        >
-          <TransactionsToastList />
-          <NotificationModal />
-          <SignTransactionsModals />
+    <Router>
+      <DappProvider
+        environment="devnet"
+        customNetworkConfig={{
+          name: 'customConfig',
+          apiTimeout: 6000,
+          walletConnectV2ProjectId: process.env.REACT_APP_WALLETCONNECTV2_KEY,
+        }}
+      >
+        <TransactionsToastList />
+        <NotificationModal />
+        <SignTransactionsModals />
+        <div className="bg-slate-900 h-screen">
           <Navbar />
           <Content />
-        </DappProvider>
-      </Router>
-    </div>
+        </div>
+      </DappProvider>
+    </Router>
   )
 }
 

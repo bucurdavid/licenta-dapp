@@ -26,6 +26,11 @@ export interface Offer {
   quantity: number
 };
 
+export interface OfferWithIndex {
+  index: number
+  offer: Offer
+};
+
 export enum CarStatus {
   New,
   SecondHand,

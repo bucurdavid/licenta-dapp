@@ -17,6 +17,7 @@ import {
 import {ProxyNetworkProvider} from '@multiversx/sdk-network-providers/out'
 import jsonData from './abis/market-sc.abi.json'
 import {marketContractAddress} from './constants'
+import {BigNumber} from 'bignumber.js'
 
 export interface CarAttributes {
   vin: string
@@ -37,6 +38,11 @@ export interface Offer {
   paymentAmount: number
   status: CarStatus
   quantity: number
+}
+
+export interface OfferWithIndex {
+  index: number
+  offer: Offer
 }
 
 export enum CarStatus {
@@ -71,18 +77,25 @@ export class MarketSmartContract {
     if (returnCode.isSuccess()) {
       const returnValue = firstValue?.valueOf()
       console.log(returnValue)
-      const offers: Offer[] = returnValue.map((offer: any) => ({
-        owner: offer.owner.bech32(),
-        carTokenIdentifier: offer['car']['token_identifier'].toString(),
-        carNonce: offer['car']['token_nonce'].toString(),
-        carAmount: offer['car']['amount'] as number,
-        paymentTokenIdentifier:
-          offer['wanted_payment']['token_identifier'].toString(),
-        paymentNonce: offer['wanted_payment']['token_nonce'].toString(),
-        paymentAmount: offer['wanted_payment']['amount'] as number,
-        status: offer['status']['name'].toString(),
-        quantity: offer.quantity as number,
-      }))
+      const offers: OfferWithIndex[] = returnValue.map(
+        (item: {index: BigNumber; offer: any}) => ({
+          index: item.index.toNumber(),
+          offer: {
+            owner: item.offer.owner.bech32(),
+            carTokenIdentifier:
+              item.offer['car']['token_identifier'].toString(),
+            carNonce: item.offer['car']['token_nonce'].toNumber(),
+            carAmount: item.offer['car']['amount'],
+            paymentTokenIdentifier:
+              item.offer['wanted_payment']['token_identifier'].toString(),
+            paymentNonce:
+              item.offer['wanted_payment']['token_nonce'].toNumber(),
+            paymentAmount: item.offer['wanted_payment']['amount'],
+            status: item.offer['status']['name'].toString(),
+            quantity: item.offer.quantity.toNumber(),
+          },
+        })
+      )
       return offers
     }
   }
@@ -101,18 +114,25 @@ export class MarketSmartContract {
     if (returnCode.isSuccess()) {
       const returnValue = firstValue?.valueOf()
       console.log(returnValue)
-      const offers: Offer[] = returnValue.map((offer: any) => ({
-        owner: offer.owner.bech32(),
-        carTokenIdentifier: offer['car']['token_identifier'].toString(),
-        carNonce: offer['car']['token_nonce'].toString(),
-        carAmount: offer['car']['amount'] as number,
-        paymentTokenIdentifier:
-          offer['wanted_payment']['token_identifier'].toString(),
-        paymentNonce: offer['wanted_payment']['token_nonce'].toString(),
-        paymentAmount: offer['wanted_payment']['amount'] as number,
-        status: offer['status']['name'].toString(),
-        quantity: offer.quantity as number,
-      }))
+      const offers: OfferWithIndex[] = returnValue.map(
+        (item: {index: BigNumber; offer: any}) => ({
+          index: item.index.toNumber(),
+          offer: {
+            owner: item.offer.owner.bech32(),
+            carTokenIdentifier:
+              item.offer['car']['token_identifier'].toString(),
+            carNonce: item.offer['car']['token_nonce'].toNumber(),
+            carAmount: item.offer['car']['amount'],
+            paymentTokenIdentifier:
+              item.offer['wanted_payment']['token_identifier'].toString(),
+            paymentNonce:
+              item.offer['wanted_payment']['token_nonce'].toNumber(),
+            paymentAmount: item.offer['wanted_payment']['amount'],
+            status: item.offer['status']['name'].toString(),
+            quantity: item.offer.quantity.toNumber(),
+          },
+        })
+      )
       return offers
     }
   }

@@ -208,7 +208,7 @@
             ],
             "outputs": [
                 {
-                    "type": "List<Offer>"
+                    "type": "List<OfferWithIndex>"
                 }
             ]
         },
@@ -223,7 +223,7 @@
             ],
             "outputs": [
                 {
-                    "type": "List<Offer>"
+                    "type": "List<OfferWithIndex>"
                 }
             ]
         },
@@ -334,6 +334,19 @@
                 {
                     "name": "quantity",
                     "type": "u64"
+                }
+            ]
+        },
+        "OfferWithIndex": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "index",
+                    "type": "u64"
+                },
+                {
+                    "name": "offer",
+                    "type": "Offer"
                 }
             ]
         }
