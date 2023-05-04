@@ -69,8 +69,8 @@ export class Car {
   }
 
   async fromApiResponse(payload: any): Promise<Car> {
-    const identifier = payload['identifier']
-    const nonce = payload['nonce'] as number
+    const identifier = payload.collection as string
+    const nonce = payload.nonce as number
     const infoContract = new InformationSmartContract()
     const historyData = await infoContract.getInformation(identifier, nonce)
     try {

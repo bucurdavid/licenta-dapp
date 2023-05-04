@@ -64,6 +64,10 @@ const CollectionDetail = () => {
   const handlePrice = (event: any) => setPrice(event.target.value)
   const [price, setPrice] = useState(0)
 
+  const [modalProps, setModalProps] = useState<{
+    collection: string
+    nonce: number
+  }>()
   const {
     isOpen: isCreateOpen,
     onOpen: onCreateOpen,
@@ -343,7 +347,17 @@ const CollectionDetail = () => {
                       offer.identifier === car.collection &&
                       offer.nonce === car.nonce
                   ) ? null : (
-                    <Button onClick={onListOpen}>List this car</Button>
+                    <Button
+                      onClick={() => {
+                        setModalProps({
+                          collection: car.collection,
+                          nonce: car.nonce,
+                        })
+                        onListOpen()
+                      }}
+                    >
+                      List this car
+                    </Button>
                   )}
                   <Button
                     onClick={() => {
@@ -386,8 +400,8 @@ const CollectionDetail = () => {
                             await listCar(
                               address,
                               marketContractAddress!,
-                              car.collection,
-                              car.nonce,
+                              modalProps!.collection,
+                              modalProps!.nonce,
                               1,
                               new BigNumber(price)
                                 .shiftedBy(6)

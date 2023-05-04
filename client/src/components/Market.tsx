@@ -1,6 +1,16 @@
 import {Suspense, useEffect, useState} from 'react'
 import {NavLink} from 'react-router-dom'
-import {Text, Image, HStack} from '@chakra-ui/react'
+import {
+  Text,
+  Image,
+  HStack,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+} from '@chakra-ui/react'
 import {
   MarketSmartContract,
   OfferWithIndex,
@@ -21,6 +31,15 @@ import {
   Heading,
   Spinner,
 } from '@chakra-ui/react'
+import {
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts'
 
 export const Market = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -89,27 +108,87 @@ export const Market = () => {
                 Last Odometer Value: {offer.Car.attributes.lastOdometerValue}
               </div>
               <div>
-                Last Odometer Timestamp:{' '}
-                {offer.Car.attributes.lastOdometerTimestamp}
+                Last Odometer Date:{' '}
+                {new Date(
+                  offer.Car.attributes.lastOdometerTimestamp * 1000
+                ).toDateString()}
+              </div>
+              <div className="py-2 text-black">
+                <h2 className="text-white text-lg">Car odometer history:</h2>
+                <LineChart
+                  width={800}
+                  height={400}
+                  data={offer.Car.historyData.odometerValues.map(
+                    (value, index) => {
+                      const date = new Date(
+                        offer.Car.historyData.odometerTimestamps[index] * 1000
+                      )
+                      const formattedDate = date
+                        .toLocaleString('en-GB', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: '2-digit',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })
+                        .replace(',', '') // remove the comma between date and time
+
+                      return {
+                        date: formattedDate,
+                        kilometers: value,
+                      }
+                    }
+                  )}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="kilometers"
+                    stroke="orange"
+                    strokeWidth={4}
+                    activeDot={{r: 8}}
+                  />
+                </LineChart>
+              </div>
+              <div className="py-2 m-2 text-black">
+                <h2 className="text-white text-lg">Car dtc history:</h2>
+                <Table variant="simple">
+                  <Thead>
+                    <Tr>
+                      <Th>Date</Th>
+                      <Th>DTC Errors</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {offer.Car.historyData.dtcTimestamps.map(
+                      (timestamp, index) => (
+                        <Tr key={index}>
+                          <Td>{new Date(timestamp * 1000).toLocaleString()}</Td>
+                          <Td>
+                            {offer.Car.historyData.dtcCodes[index].join(', ')}
+                          </Td>
+                        </Tr>
+                      )
+                    )}
+                  </Tbody>
+                </Table>
               </div>
               <div>
-                Odometer Values:{' '}
-                {offer.Car.historyData.odometerValues.join(', ')}
+                Car Status:{' '}
+                {offer.Offer.offer.status.toString() === 'SecondHand'
+                  ? 'Second Hand'
+                  : 'New'}
               </div>
-              <div>
-                Odometer Timestamps:{' '}
-                {offer.Car.historyData.odometerTimestamps.join(', ')}
-              </div>
-              <div>DTC Codes: {offer.Car.historyData.dtcCodes.join(', ')}</div>
-              <div>
-                DTC Timestamps: {offer.Car.historyData.dtcTimestamps.join(', ')}
-              </div>
-              <div>Incidents: {offer.Car.historyData.incidents.join(', ')}</div>
-              <div>
-                Incident Timestamps:{' '}
-                {offer.Car.historyData.incidentTimestamps.join(', ')}
-              </div>
-              <div>Car Status: {offer.Offer.offer.status} </div>
             </CardBody>
             <Divider />
             <CardFooter>
