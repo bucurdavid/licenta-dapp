@@ -72,10 +72,10 @@ export class InformationSmartContract {
     nonce: number,
     timestamp: number,
     odometerValue: number,
-    dtcCodes: string[],
-    incident: boolean
+    dtcCodes?: string[],
+    incident?: boolean
   ) {
-    const dtc = dtcCodes.map((dtcCode) => new StringValue(dtcCode))
+    const dtc = dtcCodes?.map((dtcCode) => new StringValue(dtcCode))
 
     const contractCallPayloadBuilder = new ContractCallPayloadBuilder()
       .setFunction(new ContractFunction('addData'))
@@ -84,14 +84,16 @@ export class InformationSmartContract {
       .addArg(new U64Value(timestamp))
       .addArg(new U64Value(odometerValue))
 
-    dtc.forEach((dtcCode) => contractCallPayloadBuilder.addArg(dtcCode))
-
-    contractCallPayloadBuilder.addArg(new BooleanValue(incident))
+    if (dtc != undefined) {
+      dtc.forEach((dtcCode) => contractCallPayloadBuilder.addArg(dtcCode))
+    }
+    if (incident != undefined) {
+      contractCallPayloadBuilder.addArg(new BooleanValue(incident))
+    }
 
     const addDataTx = new Transaction({
       value: 0,
       data: contractCallPayloadBuilder.build(),
-
       receiver: this.contract.getAddress(),
       sender: new Address(senderAddress),
       gasLimit: 19000000,

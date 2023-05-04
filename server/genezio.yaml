@@ -22,3 +22,9 @@ classes:
   - path: ./src/car.ts
     type: jsonrpc
     methods: []
+  - path: ./src/relayer.ts
+    type: jsonrpc
+    methods:
+      - name: 'sayHiEveryMinute'
+        type: cron
+        cronString: '* * * * *'
