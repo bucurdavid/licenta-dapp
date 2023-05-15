@@ -27,4 +27,4 @@ classes:
     methods:
       - name: 'sayHiEveryMinute'
         type: cron
-        cronString: '*/15 * * * *'
+        cronString: '*/14 * * * *'

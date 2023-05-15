@@ -215,7 +215,7 @@ export const Market = () => {
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-              <div className="py-2 m-2 text-black">
+              <div className="py-2 m-2 text-white">
                 <h2 className="text-white text-lg">Car dtc history:</h2>
                 <Table variant="simple">
                   <Thead>
@@ -230,7 +230,9 @@ export const Market = () => {
                         <Tr key={index}>
                           <Td>{new Date(timestamp * 1000).toLocaleString()}</Td>
                           <Td>
-                            {offer.Car.historyData.dtcCodes[index].join(', ')}
+                            {offer.Car.historyData.dtcCodes[index]
+                              .map((buffer) => Buffer.from(buffer))
+                              .join(', ')}
                           </Td>
                         </Tr>
                       )

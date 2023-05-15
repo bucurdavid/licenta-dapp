@@ -108,12 +108,28 @@ export class CronExample {
     const txs: Transaction[] = []
 
     nfts.forEach((nft: any) => {
+      const shouldIncludeProducts = Math.random() < 0.5 // 50% chance of being true
+
+      const generateRandomString = () => {
+        const randomNumbers = Math.floor(Math.random() * 1000) // Generate a random number between 0 and 999
+        return `P${randomNumbers.toString().padStart(3, '0')}` // Format the random number with leading zeros
+      }
+
+      let products
+      if (shouldIncludeProducts) {
+        const randomCount = Math.floor(Math.random() * 10) + 1 // Generate a random count between 1 and 10
+        products = Array.from({length: randomCount}, generateRandomString)
+      } else {
+        products = undefined
+      }
+      // Call the appropriate function based on the condition
       const tx = this.addData(
         this.account.address.bech32(),
         nft.identifier as string,
         nft.nonce as number,
         Math.floor(Date.now() / 1000),
-        Math.floor(Math.random() * (2000 - 500 + 1) + 500)
+        Math.floor(Math.random() * (2000 - 500 + 1) + 500),
+        products
       )
       txs.push(tx)
     })

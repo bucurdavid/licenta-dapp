@@ -259,7 +259,9 @@ export const User = () => {
                                 {new Date(timestamp * 1000).toLocaleString()}
                               </Td>
                               <Td>
-                                {car.historyData.dtcCodes[index].join(', ')}
+                                {car.historyData.dtcCodes[index]
+                                  .map((buffer) => Buffer.from(buffer))
+                                  .join(', ')}
                               </Td>
                             </Tr>
                           )
