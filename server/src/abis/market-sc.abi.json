@@ -1,354 +1,348 @@
 {
-    "buildInfo": {
-        "rustc": {
-            "version": "1.70.0-nightly",
-            "commitHash": "db0cbc48d4aaa300713a95d9b317a365a474490c",
-            "commitDate": "2023-03-26",
-            "channel": "Nightly",
-            "short": "rustc 1.70.0-nightly (db0cbc48d 2023-03-26)"
-        },
-        "contractCrate": {
-            "name": "market-sc",
-            "version": "0.0.0"
-        },
-        "framework": {
-            "name": "multiversx-sc",
-            "version": "0.39.8"
-        }
+  "buildInfo": {
+    "rustc": {
+      "version": "1.70.0-nightly",
+      "commitHash": "db0cbc48d4aaa300713a95d9b317a365a474490c",
+      "commitDate": "2023-03-26",
+      "channel": "Nightly",
+      "short": "rustc 1.70.0-nightly (db0cbc48d 2023-03-26)"
     },
-    "name": "Market",
-    "constructor": {
-        "inputs": [],
-        "outputs": []
+    "contractCrate": {
+      "name": "market-sc",
+      "version": "0.0.0"
     },
-    "endpoints": [
-        {
-            "name": "addInformationContract",
-            "onlyOwner": true,
-            "mutability": "mutable",
-            "inputs": [
-                {
-                    "name": "addres",
-                    "type": "Address"
-                }
-            ],
-            "outputs": []
-        },
-        {
-            "name": "addOffer",
-            "mutability": "mutable",
-            "payableInTokens": [
-                "*"
-            ],
-            "inputs": [
-                {
-                    "name": "payment_token",
-                    "type": "TokenIdentifier"
-                },
-                {
-                    "name": "payment_nonce",
-                    "type": "u64"
-                },
-                {
-                    "name": "payment_amount",
-                    "type": "BigUint"
-                },
-                {
-                    "name": "status",
-                    "type": "CarStatus"
-                }
-            ],
-            "outputs": []
-        },
-        {
-            "name": "changePrice",
-            "mutability": "mutable",
-            "inputs": [
-                {
-                    "name": "offer_id",
-                    "type": "u64"
-                },
-                {
-                    "name": "new_price",
-                    "type": "BigUint"
-                }
-            ],
-            "outputs": []
-        },
-        {
-            "name": "cancelOffer",
-            "mutability": "mutable",
-            "inputs": [
-                {
-                    "name": "offer_id",
-                    "type": "u64"
-                }
-            ],
-            "outputs": []
-        },
-        {
-            "name": "acceptOffer",
-            "mutability": "mutable",
-            "payableInTokens": [
-                "*"
-            ],
-            "inputs": [
-                {
-                    "name": "offer_id",
-                    "type": "u64"
-                }
-            ],
-            "outputs": []
-        },
-        {
-            "name": "getUserListedOffers",
-            "mutability": "readonly",
-            "inputs": [
-                {
-                    "name": "address",
-                    "type": "Address"
-                }
-            ],
-            "outputs": [
-                {
-                    "type": "variadic<u64>",
-                    "multi_result": true
-                }
-            ]
-        },
-        {
-            "name": "getLastValidOfferId",
-            "mutability": "readonly",
-            "inputs": [],
-            "outputs": [
-                {
-                    "type": "u64"
-                }
-            ]
-        },
-        {
-            "name": "vec_mapper",
-            "mutability": "readonly",
-            "inputs": [
-                {
-                    "name": "token_identifier",
-                    "type": "TokenIdentifier"
-                },
-                {
-                    "name": "nonce",
-                    "type": "u64"
-                }
-            ],
-            "outputs": [
-                {
-                    "type": "variadic<tuple<u64,u64>>",
-                    "multi_result": true
-                }
-            ]
-        },
-        {
-            "name": "getValuesAtAddress",
-            "mutability": "readonly",
-            "inputs": [
-                {
-                    "name": "token_identifier",
-                    "type": "TokenIdentifier"
-                },
-                {
-                    "name": "nonce",
-                    "type": "u64"
-                },
-                {
-                    "name": "address",
-                    "type": "Address"
-                },
-                {
-                    "name": "index",
-                    "type": "u32"
-                }
-            ],
-            "outputs": [
-                {
-                    "type": "tuple<u64,u64>"
-                }
-            ]
-        },
-        {
-            "name": "getLenAtAddress",
-            "mutability": "readonly",
-            "inputs": [
-                {
-                    "name": "token_identifier",
-                    "type": "TokenIdentifier"
-                },
-                {
-                    "name": "nonce",
-                    "type": "u64"
-                },
-                {
-                    "name": "address",
-                    "type": "Address"
-                }
-            ],
-            "outputs": [
-                {
-                    "type": "u32"
-                }
-            ]
-        },
-        {
-            "name": "viewOffers",
-            "mutability": "readonly",
-            "inputs": [
-                {
-                    "name": "ids",
-                    "type": "variadic<u64>",
-                    "multi_arg": true
-                }
-            ],
-            "outputs": [
-                {
-                    "type": "List<OfferWithIndex>"
-                }
-            ]
-        },
-        {
-            "name": "viewUserOffers",
-            "mutability": "readonly",
-            "inputs": [
-                {
-                    "name": "address",
-                    "type": "Address"
-                }
-            ],
-            "outputs": [
-                {
-                    "type": "List<OfferWithIndex>"
-                }
-            ]
-        },
-        {
-            "name": "viewCarDetails",
-            "mutability": "readonly",
-            "inputs": [
-                {
-                    "name": "token_identifier",
-                    "type": "TokenIdentifier"
-                },
-                {
-                    "name": "nonce",
-                    "type": "u64"
-                }
-            ],
-            "outputs": [
-                {
-                    "type": "CarAttributes"
-                }
-            ]
-        }
-    ],
-    "events": [],
-    "hasCallback": false,
-    "types": {
-        "CarAttributes": {
-            "type": "struct",
-            "docs": [
-                "Car NFT Attributes"
-            ],
-            "fields": [
-                {
-                    "name": "vin",
-                    "type": "bytes"
-                },
-                {
-                    "name": "name",
-                    "type": "bytes"
-                },
-                {
-                    "name": "build_year",
-                    "type": "u64"
-                },
-                {
-                    "name": "plant_country",
-                    "type": "bytes"
-                },
-                {
-                    "name": "last_odometer_value",
-                    "type": "u64"
-                },
-                {
-                    "name": "last_odometer_timestamp",
-                    "type": "u64"
-                }
-            ]
-        },
-        "CarStatus": {
-            "type": "enum",
-            "variants": [
-                {
-                    "name": "New",
-                    "discriminant": 0
-                },
-                {
-                    "name": "SecondHand",
-                    "discriminant": 1
-                }
-            ]
-        },
-        "EsdtTokenPayment": {
-            "type": "struct",
-            "fields": [
-                {
-                    "name": "token_identifier",
-                    "type": "TokenIdentifier"
-                },
-                {
-                    "name": "token_nonce",
-                    "type": "u64"
-                },
-                {
-                    "name": "amount",
-                    "type": "BigUint"
-                }
-            ]
-        },
-        "Offer": {
-            "type": "struct",
-            "fields": [
-                {
-                    "name": "owner",
-                    "type": "Address"
-                },
-                {
-                    "name": "car",
-                    "type": "EsdtTokenPayment"
-                },
-                {
-                    "name": "wanted_payment",
-                    "type": "EsdtTokenPayment"
-                },
-                {
-                    "name": "status",
-                    "type": "CarStatus"
-                },
-                {
-                    "name": "quantity",
-                    "type": "u64"
-                }
-            ]
-        },
-        "OfferWithIndex": {
-            "type": "struct",
-            "fields": [
-                {
-                    "name": "index",
-                    "type": "u64"
-                },
-                {
-                    "name": "offer",
-                    "type": "Offer"
-                }
-            ]
-        }
+    "framework": {
+      "name": "multiversx-sc",
+      "version": "0.39.8"
     }
+  },
+  "name": "Market",
+  "constructor": {
+    "inputs": [],
+    "outputs": []
+  },
+  "endpoints": [
+    {
+      "name": "addInformationContract",
+      "onlyOwner": true,
+      "mutability": "mutable",
+      "inputs": [
+        {
+          "name": "addres",
+          "type": "Address"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "addOffer",
+      "mutability": "mutable",
+      "payableInTokens": ["*"],
+      "inputs": [
+        {
+          "name": "payment_token",
+          "type": "TokenIdentifier"
+        },
+        {
+          "name": "payment_nonce",
+          "type": "u64"
+        },
+        {
+          "name": "payment_amount",
+          "type": "BigUint"
+        },
+        {
+          "name": "status",
+          "type": "CarStatus"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "changePrice",
+      "mutability": "mutable",
+      "inputs": [
+        {
+          "name": "offer_id",
+          "type": "u64"
+        },
+        {
+          "name": "new_price",
+          "type": "BigUint"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "cancelOffer",
+      "mutability": "mutable",
+      "inputs": [
+        {
+          "name": "offer_id",
+          "type": "u64"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "acceptOffer",
+      "mutability": "mutable",
+      "payableInTokens": ["*"],
+      "inputs": [
+        {
+          "name": "offer_id",
+          "type": "u64"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "getUserListedOffers",
+      "mutability": "readonly",
+      "inputs": [
+        {
+          "name": "address",
+          "type": "Address"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "variadic<u64>",
+          "multi_result": true
+        }
+      ]
+    },
+    {
+      "name": "getLastValidOfferId",
+      "mutability": "readonly",
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "vec_mapper",
+      "mutability": "readonly",
+      "inputs": [
+        {
+          "name": "token_identifier",
+          "type": "TokenIdentifier"
+        },
+        {
+          "name": "nonce",
+          "type": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "variadic<tuple<u64,u64>>",
+          "multi_result": true
+        }
+      ]
+    },
+    {
+      "name": "getValuesAtAddress",
+      "mutability": "readonly",
+      "inputs": [
+        {
+          "name": "token_identifier",
+          "type": "TokenIdentifier"
+        },
+        {
+          "name": "nonce",
+          "type": "u64"
+        },
+        {
+          "name": "address",
+          "type": "Address"
+        },
+        {
+          "name": "index",
+          "type": "u32"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "tuple<u64,u64>"
+        }
+      ]
+    },
+    {
+      "name": "getLenAtAddress",
+      "mutability": "readonly",
+      "inputs": [
+        {
+          "name": "token_identifier",
+          "type": "TokenIdentifier"
+        },
+        {
+          "name": "nonce",
+          "type": "u64"
+        },
+        {
+          "name": "address",
+          "type": "Address"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "viewOffers",
+      "mutability": "readonly",
+      "inputs": [
+        {
+          "name": "ids",
+          "type": "variadic<u64>",
+          "multi_arg": true
+        }
+      ],
+      "outputs": [
+        {
+          "type": "List<OfferWithIndex>"
+        }
+      ]
+    },
+    {
+      "name": "viewUserOffers",
+      "mutability": "readonly",
+      "inputs": [
+        {
+          "name": "address",
+          "type": "Address"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "List<OfferWithIndex>"
+        }
+      ]
+    },
+    {
+      "name": "viewCarDetails",
+      "mutability": "readonly",
+      "inputs": [
+        {
+          "name": "token_identifier",
+          "type": "TokenIdentifier"
+        },
+        {
+          "name": "nonce",
+          "type": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "CarAttributes"
+        }
+      ]
+    }
+  ],
+  "events": [],
+  "hasCallback": false,
+  "types": {
+    "CarAttributes": {
+      "type": "struct",
+      "docs": ["Car NFT Attributes"],
+      "fields": [
+        {
+          "name": "vin",
+          "type": "bytes"
+        },
+        {
+          "name": "name",
+          "type": "bytes"
+        },
+        {
+          "name": "build_year",
+          "type": "u64"
+        },
+        {
+          "name": "plant_country",
+          "type": "bytes"
+        },
+        {
+          "name": "last_odometer_value",
+          "type": "u64"
+        },
+        {
+          "name": "last_odometer_timestamp",
+          "type": "u64"
+        }
+      ]
+    },
+    "CarStatus": {
+      "type": "enum",
+      "variants": [
+        {
+          "name": "New",
+          "discriminant": 0
+        },
+        {
+          "name": "SecondHand",
+          "discriminant": 1
+        }
+      ]
+    },
+    "EsdtTokenPayment": {
+      "type": "struct",
+      "fields": [
+        {
+          "name": "token_identifier",
+          "type": "TokenIdentifier"
+        },
+        {
+          "name": "token_nonce",
+          "type": "u64"
+        },
+        {
+          "name": "amount",
+          "type": "BigUint"
+        }
+      ]
+    },
+    "Offer": {
+      "type": "struct",
+      "fields": [
+        {
+          "name": "owner",
+          "type": "Address"
+        },
+        {
+          "name": "car",
+          "type": "EsdtTokenPayment"
+        },
+        {
+          "name": "wanted_payment",
+          "type": "EsdtTokenPayment"
+        },
+        {
+          "name": "status",
+          "type": "CarStatus"
+        },
+        {
+          "name": "quantity",
+          "type": "u64"
+        }
+      ]
+    },
+    "OfferWithIndex": {
+      "type": "struct",
+      "fields": [
+        {
+          "name": "index",
+          "type": "u64"
+        },
+        {
+          "name": "offer",
+          "type": "Offer"
+        }
+      ]
+    }
+  }
 }

@@ -4,7 +4,6 @@ import {
   BooleanValue,
   ContractCallPayloadBuilder,
   ContractFunction,
-  IAddress,
   ResultsParser,
   SmartContract,
   StringValue,
@@ -12,9 +11,9 @@ import {
   Transaction,
   U64Value,
 } from '@multiversx/sdk-core/out'
-import {ProxyNetworkProvider} from '@multiversx/sdk-network-providers/out'
+import {ApiNetworkProvider} from '@multiversx/sdk-network-providers/out'
 import jsonData from './abis/car-data-sc.abi.json'
-import {dataContractAddres} from './constants'
+import {dataContractAddress} from './constants'
 
 export interface HistoryData {
   odometerValues: number[]
@@ -26,12 +25,12 @@ export interface HistoryData {
 }
 
 export class InformationSmartContract {
-  readonly networkProvider = new ProxyNetworkProvider(
-    'https://devnet-gateway.multiversx.com'
+  readonly networkProvider = new ApiNetworkProvider(
+    'https://devnet-api.multiversx.com'
   )
 
   contract = new SmartContract({
-    address: new Address(dataContractAddres),
+    address: new Address(dataContractAddress),
     abi: AbiRegistry.create(jsonData),
   })
 

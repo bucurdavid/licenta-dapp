@@ -36,10 +36,25 @@ import {
   Legend,
   Line,
   LineChart,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts'
+import {
+  Address,
+  AddressValue,
+  BigUIntValue,
+  ContractCallPayloadBuilder,
+  ContractFunction,
+  StringValue,
+  TokenIdentifierValue,
+  Transaction,
+  U64Value,
+} from '@multiversx/sdk-core/out'
+import {refreshAccount} from '@multiversx/sdk-dapp/utils'
+import {sendTransactions} from '@multiversx/sdk-dapp/services'
+import BigNumber from 'bignumber.js'
 
 export const Market = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -50,11 +65,44 @@ export const Market = () => {
   const {address} = useGetAccountInfo()
   const {hasPendingTransactions} = useGetPendingTransactions()
 
+  const buyCar = async (
+    senderAddress: string,
+    offerIndex: number,
+    tokenIdentifier: string,
+    price: number
+  ) => {
+    const acceptOfferTx = new Transaction({
+      value: 0,
+      data: new ContractCallPayloadBuilder()
+        .setFunction(new ContractFunction('ESDTTransfer'))
+        .addArg(new TokenIdentifierValue(tokenIdentifier))
+        .addArg(new BigUIntValue(price))
+        .addArg(new StringValue('acceptOffer'))
+        .addArg(new U64Value(offerIndex))
+        .build(),
+      sender: new Address(senderAddress),
+      receiver: new Address(marketContractAddress),
+      gasLimit: 12000000,
+      chainID: 'D',
+    })
+    await refreshAccount()
+
+    await sendTransactions({
+      transactions: acceptOfferTx,
+      transactionsDisplayInfo: {
+        processingMessage: 'Buying vehicle...',
+        errorMessage: 'Error occured',
+        successMessage: 'Buy successful',
+      },
+      redirectAfterSign: false,
+    })
+  }
+
   useEffect(() => {
     Promise.all([
       MarketSmartContract.getContractAddress(),
       MinterSmartContract.getContractAddress(),
-      MarketSmartContract.getOffers(Array.from({length: 100}, (_, i) => i + 1)), // hardcoded
+      MarketSmartContract.getOffers(Array.from({length: 10}, (_, i) => i + 1)), // hardcoded
     ])
       .then(([market, minter, offers]) => {
         setMarketContractAddress(market.bech32)
@@ -68,7 +116,6 @@ export const Market = () => {
               ).then((car) => ({Offer: offer, Car: car})) // add the Car object to the Offer object
           )
         ).then((updatedOffers) => {
-          console.log(updatedOffers)
           setFullOffers(updatedOffers)
         })
       })
@@ -83,6 +130,7 @@ export const Market = () => {
         {' '}
         My Listed Cars
       </NavLink>
+      <h1 className="text-2xl text-white py-4">Marketplace</h1>
       {isLoading ? (
         <div className="text-lg text-center text-white">Loading...</div>
       ) : !fullOffers ? (
@@ -105,7 +153,8 @@ export const Market = () => {
               <div>Build Year: {offer.Car.attributes.buildYear}</div>
               <div>Plant Country: {offer.Car.attributes.plantCountry}</div>
               <div>
-                Last Odometer Value: {offer.Car.attributes.lastOdometerValue}
+                Last Odometer Value: {offer.Car.attributes.lastOdometerValue}{' '}
+                kilometers
               </div>
               <div>
                 Last Odometer Date:{' '}
@@ -115,50 +164,56 @@ export const Market = () => {
               </div>
               <div className="py-2 text-black">
                 <h2 className="text-white text-lg">Car odometer history:</h2>
-                <LineChart
-                  width={800}
-                  height={400}
-                  data={offer.Car.historyData.odometerValues.map(
-                    (value, index) => {
-                      const date = new Date(
-                        offer.Car.historyData.odometerTimestamps[index] * 1000
-                      )
-                      const formattedDate = date
-                        .toLocaleString('en-GB', {
-                          day: '2-digit',
-                          month: '2-digit',
-                          year: '2-digit',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })
-                        .replace(',', '') // remove the comma between date and time
+                <ResponsiveContainer width="99%" height={300}>
+                  <LineChart
+                    data={offer.Car.historyData.odometerValues.map(
+                      (value, index) => {
+                        const date = new Date(
+                          offer.Car.historyData.odometerTimestamps[index] * 1000
+                        )
+                        const formattedDate = date
+                          .toLocaleString('en-GB', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })
+                          .replace(',', '') // remove the comma between date and time
 
-                      return {
-                        date: formattedDate,
-                        kilometers: value,
+                        return {
+                          date: formattedDate,
+                          kilometers: value,
+                        }
                       }
-                    }
-                  )}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="kilometers"
-                    stroke="orange"
-                    strokeWidth={4}
-                    activeDot={{r: 8}}
-                  />
-                </LineChart>
+                    )}
+                    margin={{
+                      top: 5,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis
+                      domain={[
+                        0,
+                        Math.max(...offer.Car.historyData.odometerValues) +
+                          5000,
+                      ]}
+                    />
+                    <Tooltip />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="kilometers"
+                      stroke="orange"
+                      strokeWidth={4}
+                      activeDot={{r: 8}}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
               </div>
               <div className="py-2 m-2 text-black">
                 <h2 className="text-white text-lg">Car dtc history:</h2>
@@ -189,12 +244,33 @@ export const Market = () => {
                   ? 'Second Hand'
                   : 'New'}
               </div>
+
+              <div>
+                <div>
+                  Car Price:{' '}
+                  {new BigNumber(offer.Offer.offer.paymentAmount)
+                    .shiftedBy(-6)
+                    .toString()}{' '}
+                  USD
+                </div>
+              </div>
             </CardBody>
             <Divider />
             <CardFooter>
               <ButtonGroup spacing="2">
                 {offer.Offer.offer.owner !== address && (
-                  <Button variant="solid" colorScheme="blue">
+                  <Button
+                    variant="solid"
+                    colorScheme="blue"
+                    onClick={() => {
+                      buyCar(
+                        address,
+                        offer.Offer.index,
+                        'USDC-8d4068',
+                        offer.Offer.offer.paymentAmount
+                      )
+                    }}
+                  >
                     Buy now
                   </Button>
                 )}

@@ -21,4 +21,4 @@ export function zeroPadStringIfOddLength(input: string): string {
   return input
 }
 
-export const collectionWhitelist = ['BM4-018b35', 'BM5-81190a']
+export const collectionWhitelist = ['AUDIR8-821f9e']

@@ -1,6 +1,6 @@
 export const minterContractAddress =
-  'erd1qqqqqqqqqqqqqpgqks3uwdl7htl4z5dtkp462k783yxknmnchn9q9ezeg9'
-export const dataContractAddres =
-  'erd1qqqqqqqqqqqqqpgqpjfycjjyypr5katnsh503yyg0upezxedhn9qgwaemy'
+  'erd1qqqqqqqqqqqqqpgqgcls0ehlw2ukhyzv8yk6tqmwu00sncxshn9qkaxdeu'
+export const dataContractAddress =
+  'erd1qqqqqqqqqqqqqpgq2uh3aknjmk33ydczkppnnredhs0jz5rphn9qq3xjuw'
 export const marketContractAddress =
-  'erd1qqqqqqqqqqqqqpgq0zpe7un05kwe2hz4hd2fsnuycm6qgyp6hn9qft3q3y'
+  'erd1qqqqqqqqqqqqqpgqps7kmy5rlflx8gwjz3hmnlnuxjyhvleshn9quq48ra'

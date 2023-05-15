@@ -1,142 +1,161 @@
 {
-    "buildInfo": {
-        "rustc": {
-            "version": "1.70.0-nightly",
-            "commitHash": "db0cbc48d4aaa300713a95d9b317a365a474490c",
-            "commitDate": "2023-03-26",
-            "channel": "Nightly",
-            "short": "rustc 1.70.0-nightly (db0cbc48d 2023-03-26)"
-        },
-        "contractCrate": {
-            "name": "car-data-sc",
-            "version": "0.0.0"
-        },
-        "framework": {
-            "name": "multiversx-sc",
-            "version": "0.39.8"
-        }
+  "buildInfo": {
+    "rustc": {
+      "version": "1.70.0-nightly",
+      "commitHash": "db0cbc48d4aaa300713a95d9b317a365a474490c",
+      "commitDate": "2023-03-26",
+      "channel": "Nightly",
+      "short": "rustc 1.70.0-nightly (db0cbc48d 2023-03-26)"
     },
-    "name": "CarData",
-    "constructor": {
-        "inputs": [],
-        "outputs": []
+    "contractCrate": {
+      "name": "car-data-sc",
+      "version": "0.0.0"
     },
-    "endpoints": [
-        {
-            "name": "addRelayer",
-            "onlyOwner": true,
-            "mutability": "mutable",
-            "inputs": [
-                {
-                    "name": "address",
-                    "type": "Address"
-                }
-            ],
-            "outputs": []
-        },
-        {
-            "name": "addData",
-            "mutability": "mutable",
-            "inputs": [
-                {
-                    "name": "token_identifier",
-                    "type": "TokenIdentifier"
-                },
-                {
-                    "name": "nonce",
-                    "type": "u64"
-                },
-                {
-                    "name": "timestamp",
-                    "type": "u64"
-                },
-                {
-                    "name": "odometer_value",
-                    "type": "u64"
-                },
-                {
-                    "name": "opt_dtc_codes",
-                    "type": "optional<variadic<bytes>>",
-                    "multi_arg": true
-                },
-                {
-                    "name": "opt_incident",
-                    "type": "optional<bool>",
-                    "multi_arg": true
-                }
-            ],
-            "outputs": []
-        },
-        {
-            "name": "addIncident",
-            "mutability": "mutable",
-            "inputs": [
-                {
-                    "name": "token_identifier",
-                    "type": "TokenIdentifier"
-                },
-                {
-                    "name": "nonce",
-                    "type": "u64"
-                },
-                {
-                    "name": "timestamp",
-                    "type": "u64"
-                }
-            ],
-            "outputs": []
-        },
-        {
-            "name": "viewCarData",
-            "mutability": "readonly",
-            "inputs": [
-                {
-                    "name": "token_identifier",
-                    "type": "TokenIdentifier"
-                },
-                {
-                    "name": "nonce",
-                    "type": "u64"
-                }
-            ],
-            "outputs": [
-                {
-                    "type": "HistoryData"
-                }
-            ]
-        }
-    ],
-    "events": [],
-    "hasCallback": false,
-    "types": {
-        "HistoryData": {
-            "type": "struct",
-            "fields": [
-                {
-                    "name": "odometer_values",
-                    "type": "List<u64>"
-                },
-                {
-                    "name": "odometer_timestamps",
-                    "type": "List<u64>"
-                },
-                {
-                    "name": "dtc_codes",
-                    "type": "List<List<bytes>>"
-                },
-                {
-                    "name": "dtc_timestamps",
-                    "type": "List<u64>"
-                },
-                {
-                    "name": "incidents",
-                    "type": "List<bool>"
-                },
-                {
-                    "name": "incident_timestamps",
-                    "type": "List<u64>"
-                }
-            ]
-        }
+    "framework": {
+      "name": "multiversx-sc",
+      "version": "0.39.8"
     }
+  },
+  "name": "CarData",
+  "constructor": {
+    "inputs": [],
+    "outputs": []
+  },
+  "endpoints": [
+    {
+      "name": "addRelayer",
+      "onlyOwner": true,
+      "mutability": "mutable",
+      "inputs": [
+        {
+          "name": "address",
+          "type": "Address"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "addData",
+      "mutability": "mutable",
+      "inputs": [
+        {
+          "name": "token_identifier",
+          "type": "TokenIdentifier"
+        },
+        {
+          "name": "nonce",
+          "type": "u64"
+        },
+        {
+          "name": "timestamp",
+          "type": "u64"
+        },
+        {
+          "name": "odometer_value",
+          "type": "u64"
+        },
+        {
+          "name": "opt_dtc_codes",
+          "type": "optional<variadic<bytes>>",
+          "multi_arg": true
+        },
+        {
+          "name": "opt_incident",
+          "type": "optional<bool>",
+          "multi_arg": true
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "addIncident",
+      "mutability": "mutable",
+      "inputs": [
+        {
+          "name": "token_identifier",
+          "type": "TokenIdentifier"
+        },
+        {
+          "name": "nonce",
+          "type": "u64"
+        },
+        {
+          "name": "timestamp",
+          "type": "u64"
+        }
+      ],
+      "outputs": []
+    },
+    {
+      "name": "viewCarData",
+      "mutability": "readonly",
+      "inputs": [
+        {
+          "name": "token_identifier",
+          "type": "TokenIdentifier"
+        },
+        {
+          "name": "nonce",
+          "type": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "HistoryData"
+        }
+      ]
+    },
+    {
+      "name": "viewLastOdometerValue",
+      "mutability": "readonly",
+      "inputs": [
+        {
+          "name": "token_identifier",
+          "type": "TokenIdentifier"
+        },
+        {
+          "name": "nonce",
+          "type": "u64"
+        }
+      ],
+      "outputs": [
+        {
+          "type": "tuple<u64,u64>"
+        }
+      ]
+    }
+  ],
+  "events": [],
+  "hasCallback": false,
+  "types": {
+    "HistoryData": {
+      "type": "struct",
+      "fields": [
+        {
+          "name": "odometer_values",
+          "type": "List<u64>"
+        },
+        {
+          "name": "odometer_timestamps",
+          "type": "List<u64>"
+        },
+        {
+          "name": "dtc_codes",
+          "type": "List<List<bytes>>"
+        },
+        {
+          "name": "dtc_timestamps",
+          "type": "List<u64>"
+        },
+        {
+          "name": "incidents",
+          "type": "List<bool>"
+        },
+        {
+          "name": "incident_timestamps",
+          "type": "List<u64>"
+        }
+      ]
+    }
+  }
 }

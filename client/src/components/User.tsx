@@ -154,6 +154,29 @@ export const User = () => {
     })
   }
 
+  function createChartData(
+    odometerValues: number[],
+    odometerTimestamps: number[]
+  ) {
+    const data = odometerValues.map((value, index) => {
+      const date = new Date(odometerTimestamps[index] * 1000)
+      const formattedDate = date
+        .toLocaleString('en-GB', {
+          day: '2-digit',
+          month: '2-digit',
+          year: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+        .replace(',', '')
+      return {
+        date: formattedDate,
+        kilometers: value,
+      }
+    })
+    return data
+  }
+
   return (
     <div className="text-white bg-slate-900">
       {isLoading && <p className="text-white text-center">Loading...</p>}
@@ -191,50 +214,33 @@ export const User = () => {
                     <h2 className="text-white text-lg">
                       Car odometer history:
                     </h2>
-                    <LineChart
-                      width={800}
-                      height={400}
-                      data={car.historyData.odometerValues.map(
-                        (value, index) => {
-                          const date = new Date(
-                            car.historyData.odometerTimestamps[index] * 1000
-                          )
-                          const formattedDate = date
-                            .toLocaleString('en-GB', {
-                              day: '2-digit',
-                              month: '2-digit',
-                              year: '2-digit',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })
-                            .replace(',', '') // remove the comma between date and time
-
-                          return {
-                            date: formattedDate,
-                            kilometers: value,
-                          }
-                        }
-                      )}
-                      margin={{
-                        top: 5,
-                        right: 30,
-                        left: 20,
-                        bottom: 5,
-                      }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line
-                        type="monotone"
-                        dataKey="kilometers"
-                        stroke="orange"
-                        strokeWidth={4}
-                        activeDot={{r: 8}}
-                      />
-                    </LineChart>
+                    <ResponsiveContainer width="99%" height={300}>
+                      <LineChart
+                        data={createChartData(
+                          car.historyData.odometerValues,
+                          car.historyData.odometerTimestamps
+                        )}
+                        margin={{top: 10, right: 30, left: 0, bottom: 0}}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="date" />
+                        <YAxis
+                          domain={[
+                            0,
+                            Math.max(...car.historyData.odometerValues) + 5000,
+                          ]}
+                        />
+                        <Tooltip />
+                        <Legend />
+                        <Line
+                          type="monotone"
+                          dataKey="kilometers"
+                          stroke="orange"
+                          strokeWidth={4}
+                          activeDot={{r: 8}}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
                   </div>
                   <div className="py-2 m-2 text-black">
                     <h2 className="text-white text-lg">Car dtc history:</h2>

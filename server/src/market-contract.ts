@@ -5,7 +5,6 @@ import {
   BigIntValue,
   ContractCallPayloadBuilder,
   ContractFunction,
-  IAddress,
   ResultsParser,
   SmartContract,
   StringValue,
@@ -14,7 +13,7 @@ import {
   U64Value,
   U8Value,
 } from '@multiversx/sdk-core/out'
-import {ProxyNetworkProvider} from '@multiversx/sdk-network-providers/out'
+import {ApiNetworkProvider} from '@multiversx/sdk-network-providers/out'
 import jsonData from './abis/market-sc.abi.json'
 import {marketContractAddress} from './constants'
 import {BigNumber} from 'bignumber.js'
@@ -51,8 +50,8 @@ export enum CarStatus {
 }
 
 export class MarketSmartContract {
-  readonly networkProvider = new ProxyNetworkProvider(
-    'https://devnet-gateway.multiversx.com'
+  readonly networkProvider = new ApiNetworkProvider(
+    'https://devnet-api.multiversx.com'
   )
 
   contract = new SmartContract({
@@ -62,6 +61,60 @@ export class MarketSmartContract {
 
   async getContractAddress() {
     return this.contract.getAddress()
+  }
+
+  async getLenAtAddress(
+    tokenIdentifier: string,
+    nonce: number,
+    address: string
+  ) {
+    const interaction = this.contract.methodsExplicit.getLenAtAddress([
+      new TokenIdentifierValue(tokenIdentifier),
+      new U64Value(nonce),
+      new AddressValue(new Address(address)),
+    ])
+    const query = interaction.buildQuery()
+    const queryResponse = await this.networkProvider.queryContract(query)
+    const endpointDefinition = interaction.getEndpoint()
+    const {firstValue, returnCode} = new ResultsParser().parseQueryResponse(
+      queryResponse,
+      endpointDefinition
+    )
+    if (returnCode.isSuccess()) {
+      const returnValue = firstValue?.valueOf()
+      console.log(returnValue)
+      return returnValue
+    } else {
+      throw new Error('Error while getting len')
+    }
+  }
+
+  async getValuesAtAddress(
+    tokenIdentifier: string,
+    nonce: number,
+    address: string,
+    index: number
+  ) {
+    const interaction = this.contract.methodsExplicit.getValuesAtAddress([
+      new TokenIdentifierValue(tokenIdentifier),
+      new U64Value(nonce),
+      new AddressValue(new Address(address)),
+      new U64Value(index),
+    ])
+    const query = interaction.buildQuery()
+    const queryResponse = await this.networkProvider.queryContract(query)
+    const endpointDefinition = interaction.getEndpoint()
+    const {firstValue, returnCode} = new ResultsParser().parseQueryResponse(
+      queryResponse,
+      endpointDefinition
+    )
+    if (returnCode.isSuccess()) {
+      const returnValue = firstValue?.valueOf()
+      console.log(returnValue)
+      return returnValue
+    } else {
+      throw new Error('Error while getting values')
+    }
   }
 
   async getOffers(ids: number[]) {
@@ -76,7 +129,6 @@ export class MarketSmartContract {
     )
     if (returnCode.isSuccess()) {
       const returnValue = firstValue?.valueOf()
-      console.log(returnValue)
       const offers: OfferWithIndex[] = returnValue.map(
         (item: {index: BigNumber; offer: any}) => ({
           index: item.index.toNumber(),
@@ -96,6 +148,7 @@ export class MarketSmartContract {
           },
         })
       )
+      console.log(offers)
       return offers
     }
   }

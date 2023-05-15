@@ -1,16 +1,26 @@
-import {Account, Transaction} from '@multiversx/sdk-core/out'
-import {ProxyNetworkProvider} from '@multiversx/sdk-network-providers/out'
+import {
+  Account,
+  Address,
+  BooleanValue,
+  ContractCallPayloadBuilder,
+  ContractFunction,
+  StringValue,
+  TokenIdentifierValue,
+  Transaction,
+  U64Value,
+} from '@multiversx/sdk-core/out'
+import {ApiNetworkProvider} from '@multiversx/sdk-network-providers/out'
 import {Mnemonic, UserSecretKey, UserSigner} from '@multiversx/sdk-wallet/out'
 import * as dotenv from 'dotenv'
 import {minterContractAddress} from './constants'
-import {InformationSmartContract} from './information-contract'
+import {dataContractAddress} from './constants'
 const fs = require('fs')
 
 dotenv.config()
 
 export class CronExample {
-  readonly networkProvider = new ProxyNetworkProvider(
-    'https://devnet-gateway.multiversx.com'
+  readonly networkProvider = new ApiNetworkProvider(
+    'https://devnet-api.multiversx.com'
   )
   readonly signer: UserSigner
   readonly account: Account
@@ -46,8 +56,8 @@ export class CronExample {
       const nfts = await nftsQuery.json()
 
       return nfts.map((nft: any) => ({
-        identifier: nft.collection,
-        none: nft.nonce,
+        identifier: nft.collection as string,
+        nonce: nft.nonce as number,
       }))
     })
 
@@ -58,17 +68,56 @@ export class CronExample {
     return nfts
   }
 
-  private createTransactions(nfts: any) {
-    const infoContract = new InformationSmartContract()
-    const txs = nfts.forEach((nft: any) => {
-      infoContract.addData(
+  private addData(
+    senderAddress: string,
+    tokenIdentifier: string,
+    nonce: number,
+    timestamp: number,
+    odometerValue: number,
+    dtcCodes?: string[],
+    incident?: boolean
+  ) {
+    const dtc = dtcCodes?.map((dtcCode) => new StringValue(dtcCode))
+
+    const contractCallPayloadBuilder = new ContractCallPayloadBuilder()
+      .setFunction(new ContractFunction('addData'))
+      .addArg(new TokenIdentifierValue(tokenIdentifier))
+      .addArg(new U64Value(nonce))
+      .addArg(new U64Value(timestamp))
+      .addArg(new U64Value(odometerValue))
+
+    if (dtc != undefined) {
+      dtc.forEach((dtcCode) => contractCallPayloadBuilder.addArg(dtcCode))
+    }
+    if (incident != undefined) {
+      contractCallPayloadBuilder.addArg(new BooleanValue(incident))
+    }
+
+    const addDataTx = new Transaction({
+      value: 0,
+      data: contractCallPayloadBuilder.build(),
+      receiver: new Address(dataContractAddress),
+      sender: new Address(senderAddress),
+      gasLimit: 19000000,
+      chainID: 'D',
+    })
+    return addDataTx
+  }
+
+  private async createTransactions(nfts: any[]) {
+    const txs: Transaction[] = []
+
+    nfts.forEach((nft: any) => {
+      const tx = this.addData(
         this.account.address.bech32(),
-        nft.identifier,
-        nft.number,
+        nft.identifier as string,
+        nft.nonce as number,
         Math.floor(Date.now() / 1000),
         Math.floor(Math.random() * (2000 - 500 + 1) + 500)
       )
+      txs.push(tx)
     })
+
     return txs
   }
 
@@ -77,13 +126,13 @@ export class CronExample {
       this.account.address
     )
     this.account.update(relayerOnNetwork)
-    const nfts = this.getNfts()
-    const txs = this.createTransactions(nfts)
-    txs.forEach((tx: Transaction) => {
+    const nfts = await this.getNfts()
+    const txs = await this.createTransactions(nfts)
+    txs.forEach(async (tx: Transaction) => {
       tx.setNonce(this.account.getNonceThenIncrement())
-      const seandable = tx.toSendable()
-      this.signer.sign(seandable)
-      const txHash = this.networkProvider.sendTransaction(seandable)
+      const signature = await this.signer.sign(tx.serializeForSigning())
+      tx.applySignature(signature)
+      const txHash = await this.networkProvider.sendTransaction(tx)
       console.log(txHash)
     })
   }

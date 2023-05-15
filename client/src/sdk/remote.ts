@@ -5,7 +5,6 @@
 
 async function makeRequest(request: any, url: any) {
     const response = await fetch(`${url}`, {
-        keepalive: true,
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

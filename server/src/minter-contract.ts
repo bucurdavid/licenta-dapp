@@ -13,7 +13,7 @@ import {
   Transaction,
   U64Value,
 } from '@multiversx/sdk-core/out'
-import {ProxyNetworkProvider} from '@multiversx/sdk-network-providers/out'
+import {ApiNetworkProvider} from '@multiversx/sdk-network-providers/out'
 import jsonData from './abis/minter-sc.abi.json'
 import {minterContractAddress} from './constants'
 
@@ -27,8 +27,8 @@ export interface Manufacturer {
   models: Model[]
 }
 export class MinterSmartContract {
-  readonly networkProvider = new ProxyNetworkProvider(
-    'https://devnet-gateway.multiversx.com'
+  readonly networkProvider = new ApiNetworkProvider(
+    'https://devnet-api.multiversx.com'
   )
 
   readonly contract = new SmartContract({

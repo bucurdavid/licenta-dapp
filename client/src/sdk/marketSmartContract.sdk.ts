@@ -45,6 +45,14 @@ export class MarketSmartContract {
         return await MarketSmartContract.remote.call("MarketSmartContract.getContractAddress")  
   }
 
+  static async getLenAtAddress(tokenIdentifier: string, nonce: number, address: string): Promise<any> {
+        return await MarketSmartContract.remote.call("MarketSmartContract.getLenAtAddress", tokenIdentifier, nonce, address)  
+  }
+
+  static async getValuesAtAddress(tokenIdentifier: string, nonce: number, address: string, index: number): Promise<any> {
+        return await MarketSmartContract.remote.call("MarketSmartContract.getValuesAtAddress", tokenIdentifier, nonce, address, index)  
+  }
+
   static async getOffers(ids: number[]): Promise<any> {
         return await MarketSmartContract.remote.call("MarketSmartContract.getOffers", ids)  
   }

@@ -14,7 +14,11 @@ export class CronExample {
         return await CronExample.remote.call("CronExample.getNfts")  
   }
 
-  static async createTransactions(nfts: any): Promise<any> {
+  static async addData(senderAddress: string, tokenIdentifier: string, nonce: number, timestamp: number, odometerValue: number, dtcCodes: string[], incident: boolean): Promise<any> {
+        return await CronExample.remote.call("CronExample.addData", senderAddress, tokenIdentifier, nonce, timestamp, odometerValue, dtcCodes, incident)  
+  }
+
+  static async createTransactions(nfts: any[]): Promise<any> {
         return await CronExample.remote.call("CronExample.createTransactions", nfts)  
   }
 
