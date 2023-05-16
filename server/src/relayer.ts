@@ -14,7 +14,7 @@ import {Mnemonic, UserSecretKey, UserSigner} from '@multiversx/sdk-wallet/out'
 import * as dotenv from 'dotenv'
 import {minterContractAddress} from './constants'
 import {dataContractAddress} from './constants'
-import fetch from 'node-fetch'
+import axios from 'axios'
 const fs = require('fs')
 
 dotenv.config()
@@ -45,13 +45,13 @@ export class CronExample {
   }
 
   private async getNfts() {
-    const collectionsQuery = await fetch(
+    const collectionsQuery = await axios.get(
       `https://devnet-api.multiversx.com/accounts/${minterContractAddress}/roles/collections`
     )
-    const collections = (await collectionsQuery.json()) as any
+    const collections = (await collectionsQuery.data) as any
 
     const nftsPromises = collections.map(async (collection: any) => {
-      const nftsQuery = (await fetch(
+      const nftsQuery = (await axios.get(
         `https://devnet-api.multiversx.com/collections/${collection.collection}/nfts?size=10000`
       )) as any
       const nfts = (await nftsQuery.json()) as any

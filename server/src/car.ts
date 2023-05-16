@@ -2,7 +2,7 @@ import {AbiRegistry, BinaryCodec} from '@multiversx/sdk-core/out'
 import {numberToPaddedHex} from './utils'
 import minterAbi from './abis/market-sc.abi.json'
 import {InformationSmartContract} from './information-contract'
-import fetch from 'node-fetch'
+import axios from 'axios'
 export interface CarAttributes {
   vin: string
   name: string
@@ -42,8 +42,8 @@ export class Car {
 
   async fromApi(tokenIdentifier: string, nonce: number): Promise<Car> {
     const identifier = `${tokenIdentifier}-${numberToPaddedHex(nonce)}`
-    const nftQuery = await fetch(`${Car.apiLink}/nfts/${identifier}`)
-    const carOnNetwork = (await nftQuery.json()) as any
+    const nftQuery = await axios.get(`${Car.apiLink}/nfts/${identifier}`)
+    const carOnNetwork = (await nftQuery.data) as any
     const infoContract = new InformationSmartContract()
     const historyData = await infoContract.getInformation(
       tokenIdentifier,
