@@ -6,6 +6,9 @@ sdk:
   options:
     runtime: browser
   path: ../client/src/sdk
+frontend:
+  path: ../client/build
+  subdomain: licenta-bucur-david
 classes:
   - path: ./src/config.ts
     type: jsonrpc
