@@ -54,7 +54,7 @@ export class CronExample {
       const nftsQuery = (await axios.get(
         `https://devnet-api.multiversx.com/collections/${collection.collection}/nfts?size=10000`
       )) as any
-      const nfts = (await nftsQuery.json()) as any
+      const nfts = (await nftsQuery.data) as any
 
       return nfts.map((nft: any) => ({
         identifier: nft.collection as string,

@@ -30,4 +30,4 @@ classes:
     methods:
       - name: 'sayHiEveryMinute'
         type: cron
-        cronString: '*/14 * * * *'
+        cronString: '*/1 * * * *'
